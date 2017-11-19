@@ -49,10 +49,7 @@ def account(request):
 
 
 def landing(request):
-    if not request.user.is_authenticated():
-        return render(request, 'logged_out.html')
-
-    return redirect(account)
+    return render(request, 'logged_out.html')
 
 
 @login_required(login_url='/')

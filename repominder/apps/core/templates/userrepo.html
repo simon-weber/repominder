@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<p>
+    {% if releasewatch %}
+        <p>
+            This repo is watched.
+        </p>
+
+        <p>
+            Your badge looks like:
+            <br/>
+            <object height="20" data="{{ badge_url }}" type="image/svg+xml"></object>
+        </p>
+
+        <p>
+            To embed it, click then copy the matching format for your readme:
+        </p>
+
+        <form class="form-horizontal">
+            {% comment %} TODO make the link part of template {% endcomment %}
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="markdown-embed">Markdown</label>
+                <div class="col-md-9">
+                    <input readonly id="markdown-embed" type="text" class="form-control" onClick="this.select();" value="[![Repominder]({{ badge_url }})](https://www.repominder.com)"></input>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="rest-embed">reStructuredText</label>
+
+                <div class="col-md-9">
+                    <input readonly id="rest-embed" type="text" class="form-control" onClick="this.select();" value=".. image:: {{ badge_url }}   :target: https://www.repominder.com"></input>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="html-embed">html</label>
+                <div class="col-md-9">
+                    <input readonly id="html-embed" type="text" class="form-control" onClick="this.select();" value="<object height=&quot;20&quot; data=&quot;{{ badge_url }}&quot; type=&quot;image/svg+xml&quot;></object>"></input>
+                </div>
+            </div>
+        </form>
+    {% elif not watchform %}
+        <p>
+            Select a release type for {{ userrepo.repo.full_name }}:
+        </p>
+        <ul>
+            <li><a href="{% url 'userrepo' id=userrepo.id %}?style={{ ReleaseWatch.DUAL_BRANCH }}">dual branch</a>: PRs are merged to one branch, then that branch is merged to another when releasing.</li>
+            <li><a href="{% url 'userrepo' id=userrepo.id %}?style={{ ReleaseWatch.TAG_PATTERN }}">tag pattern</a>: a new annotated tag matching a pattern is created when releasing.</li>
+        </ul>
+    {% endif %}
+</p>
+
+{% if watchform %}
+    <p>
+        Configure {{ userrepo.repo.full_name }}:
+    </p>
+    <form method="post" class="form-horizontal" action="{% url 'userrepo' id=userrepo.id %}">
+        {% csrf_token %}
+        {% bootstrap_form watchform layout='horizontal'%}
+
+        <div class="form-group">
+            <label class="col-md-3 control-label">&nbsp;</label>
+            <div class="col-md-9">
+                <button class="btn btn-primary" type="submit" name="submit">update</button>
+                {% if releasewatch %}
+                    &nbsp;
+                    <button class="btn btn-default" type="submit" name="delete">unwatch</button>
+                {% endif %}
+            </div>
+        </div>
+
+    </form>
+{% endif %}
+
+{% endblock content %}

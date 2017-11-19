@@ -1,0 +1,5 @@
+approot: "/opt/repominder"
+appdir: "/opt/repominder/code"
+venv: "{{ approot }}/venv"
+assetdir: "{{ approot }}/assets"
+deploydir: "{{ approot }}/deploy"

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% block navbar %}
+{% endblock navbar %}
+{% block header %}
+<div class="jumbotron">
+    <div class="container text-center landing">
+        <h1>Repominder</h1>
+        <h2>Timely releases.</h2>
+        <br/>
+
+        <p>
+        Get notified if you've forgotten to cut a release for a GitHub project.
+        </p>
+
+        <a class="btn btn-primary btn-lg active" href="{% url 'social:begin' 'github' %}?next=/">Log in with GitHub</a>
+    </div>
+</div>
+<div class="container landing">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="text-center">
+                <h3>Connect your account</h3>
+                <p>No special scopes are required, just your email address.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-1">
+            <div class="text-center">
+                <h3><span class="glyphicon glyphicon-arrow-right"></span></h3>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="text-center">
+                <h3>Select repos</h3>
+                <p>Configure the release style (branch or tag-based) for any of your public repos.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-1">
+            <div class="text-center">
+                <h3><span class="glyphicon glyphicon-arrow-right"></span></h3>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="text-center">
+                <h3>Receive an email</h3>
+                <p>On Sundays you'll receive an email if you have changes awaiting release.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock header %}

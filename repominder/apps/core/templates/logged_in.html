@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+{% if releasewatches %}
+    You will receive an email on Sundays to {{ user.email }} if a watched repo has unreleased changes.
+    <br/>
+    <br/>
+    Choose a watched repo to edit or unwatch:
+    <ul>
+    {% for releasewatch in releasewatches %}
+        <li><a href="{% url 'userrepo' id=releasewatch.userrepo.id %}">{{ releasewatch.userrepo.repo.full_name }}</a></li> 
+    {% endfor %}
+    </ul>
+{% endif %}
+
+Choose a repo to watch:
+<ul>
+{% for userrepo in userrepos %}
+    <li><a href="{% url 'userrepo' id=userrepo.id %}">{{ userrepo.repo.full_name }}</a></li> 
+{% endfor %}
+</ul>
+
+{% endblock content %}

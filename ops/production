@@ -1,0 +1,10 @@
+alpha ansible_port=54000 ansible_ssh_host=107.161.91.119 ansible_ssh_private_key_file=alpha_rsa
+
+[appservers]
+alpha
+
+[webservers]
+alpha
+
+[deploytargets:children]
+appservers

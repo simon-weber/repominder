@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <!-- Basic Page Needs
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Repominder</title>
+        <meta name="description" content="Timely releases.">
+        <meta name="author" content="simon@simonmweber.com">
+
+        <!-- FONT
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
+
+        <!-- CSS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+        <!-- Favicon
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+        <!-- JS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109514443-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-109514443-1');
+        </script>
+
+        <style>
+
+            /* Always show the scrollbar, avoiding flickering content. */
+            html {
+                overflow-y: scroll;
+            }
+
+            /* fix navbar-text indentation on mobile: http://stackoverflow.com/a/20411963 */
+            @media (max-width: 767px) {    
+                p.navbar-text {
+                    margin: 0;
+                    padding: 10px 15px;
+                }
+                .navbar li {
+                    overflow: hidden;
+                }
+            }
+
+            /* Make the container smaller on large screens when logged in. */
+            @media (min-width: 768px) {
+                .container:not(.landing) {
+                    width: 768px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar-wrapper">
+            {% block navbar %}
+            <div class="container">
+              <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    {% if user.is_authenticated %}
+                    <div class="navbar-header">
+                        <a href="{% url 'account' %}">Repominder</a>
+                    </div>
+                    {% else %}
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="/">Repominder</a>
+                    </div>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'logout' %}?next=/">Log Out</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><p class="navbar-text"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</p></li>
+                    </ul>
+                    {% else %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'landing' %}">Log In</a></li>
+                    </ul>
+                    {% endif %}
+              </nav>
+            </div>
+            {% endblock navbar %}
+        </div>
+
+        <div id="header">
+            {% block header %}
+            {% endblock header %}
+        </div>
+
+        <div id="content" class="container">
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <div id="footer" class="container">
+            <footer class="footer text-center">
+                {% block footer %}
+                <br/>
+                <br/>
+                <hr>
+                {% comment %}
+                <a href="/privacy">privacy</a>
+                |
+                <a href="/terms">terms</a>
+                |
+                {% endcomment %}
+                <a href="https://github.com/simon-weber/repominder">code</a>
+                |
+                <a href="https://simonmweber.com">author</a>
+
+                <br/>
+                For support, email 
+                <a href="mailto:support@repominder.com" target="_blank" rel="noopener noreferrer">support@repominder.com</a>
+                or tweet <a href="https://twitter.com/simonmweber" target="_blank" ref="noopener noreferrer">@simonmweber</a>.
+
+                <br/>
+                Google Music user? Check out <a href="https://autoplaylists.simon.codes/" target="_blank" rel="noopener noreferrer">Autoplaylists for Google Music</a>.
+                {% endblock footer %}
+            </footer>
+        </div>
+    </body>
+</html>

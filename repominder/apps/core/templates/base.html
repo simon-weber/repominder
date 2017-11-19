@@ -75,7 +75,7 @@
                 <div class="container-fluid">
                     {% if user.is_authenticated %}
                     <div class="navbar-header">
-                        <a href="{% url 'account' %}">Repominder</a>
+                        <a class="navbar-brand" href="{% url 'account' %}">Repominder</a>
                     </div>
                     {% else %}
                     <div class="navbar-header">

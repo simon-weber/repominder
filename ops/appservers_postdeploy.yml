@@ -12,9 +12,7 @@
     - name: create cron logfiles
       copy: content='' dest=/var/log/{{ item }} force=no owner={{ appuser }} group={{ appuser }} mode=0660
       with_items:
-          - delete_old_mail.log
-          - sync_licenses.log
-          - reenable_bots.log
+          - send_notifications.log
       sudo: yes
   
     - cron: name="send notifications"

@@ -30,6 +30,7 @@ def send_email(user, diffs):
         for diff in without_changes:
             lines.append("  * %s" % diff.repo_name)
 
+    lines.append('\n')
     lines.append('To configure your reminders, log in at https://www.repominder.com')
 
     email = EmailMessage(

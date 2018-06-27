@@ -49,5 +49,5 @@
       register: result
       # Sometimes the socket isn't released right away.
       until: result.stderr.find("Another program is already listening") == -1
-      retries: 3
-      delay: 2
+      retries: 10
+      delay: 3

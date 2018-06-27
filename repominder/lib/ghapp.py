@@ -1,32 +1,20 @@
 import logging
-import requests
 
 from django.db import transaction
+from github import Github
 
 from repominder.apps.core.models import Repo, UserRepo
 
 logger = logging.getLogger(__name__)
 
 
-def get_session():
-    """Return a requests.Session for use with the apps api."""
-
-    return requests.Session()
-
-
-def set_auth(session, installation_token):
-    session.headers.update({'Authorization': "token %s" % installation_token})
-
-
 def cache_repos(user):
     # TODO this isn't really generic
     social = user.social_auth.get(provider='github')
 
-    s = get_session()
-    set_auth(s, social.extra_data['access_token'])
-    res = s.get("https://api.github.com/users/%s/repos" % social.extra_data['login'])
-    res.raise_for_status()
-    current_names = {repo['full_name'] for repo in res.json()}
+    gh = Github(social.extra_data['access_token'])
+    repos = gh.get_user().get_repos()
+    current_names = {r.full_name for r in repos}
 
     # bulk create/update repos, then bulk create/update links for this user
     with transaction.atomic():

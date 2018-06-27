@@ -62,6 +62,16 @@ class ReleaseWatch(models.Model):
         choices=CHOICES,
     )
 
+    exclude_pattern = models.CharField(
+        max_length=256, blank=True,
+        default='[!*]',
+        help_text=(
+            "A shell pattern to match commit messages that shouldn't count as a release."
+            ' The default matches nothing.'
+            ' <a href="https://docs.python.org/2/library/fnmatch.html">More details</a>.'
+        )
+    )
+
     def __unicode__(self):
         return "<ReleaseWatch(%s): %s %s>" % (self.id, self.userrepo.repo.full_name, self.style)
 

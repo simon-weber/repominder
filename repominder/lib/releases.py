@@ -62,25 +62,36 @@ class ReleaseDiff(namedtuple('ReleaseDiff', ['repo_name', 'has_changes', 'compar
         gh = Github(token)
 
         if releasewatch.style == ReleaseWatch.DUAL_BRANCH:
-            return two_branch_diff(gh, releasewatch.userrepo.repo.full_name, releasewatch.release_branch, releasewatch.dev_branch)
+            return two_branch_diff(gh, releasewatch.userrepo.repo.full_name,
+                                   releasewatch.release_branch, releasewatch.dev_branch, releasewatch.exclude_pattern)
         elif releasewatch.style == ReleaseWatch.TAG_PATTERN:
-            return tag_pattern_diff(gh, releasewatch.userrepo.repo.full_name, releasewatch.tag_pattern, releasewatch.dev_branch)
+            return tag_pattern_diff(gh, releasewatch.userrepo.repo.full_name,
+                                    releasewatch.tag_pattern, releasewatch.dev_branch, releasewatch.exclude_pattern)
         else:
             raise ValueError("unknown release style: %s" % releasewatch.style)
 
 
-def two_branch_diff(gh, repo_full_name, base, head):
+def all_commits_excluded(exclude_pattern, comparison):
+    p = re.compile(fnmatch.translate(exclude_pattern))
+    for ghcommit in comparison.commits:
+        if not p.match(ghcommit.commit.message):
+            logger.info("found unexcluded commit: %r matched %r", exclude_pattern, ghcommit.commit.message)
+            return False
+    return True
+
+
+def two_branch_diff(gh, repo_full_name, base, head, exclude_pattern):
     # TODO unneeded request
     repo = gh.get_repo(repo_full_name)
     comparison = repo.compare(base, head)
 
-    if comparison.ahead_by:
+    if comparison.ahead_by and not all_commits_excluded(exclude_pattern, comparison):
         return ReleaseDiff(repo_full_name, True, comparison.html_url)
 
     return ReleaseDiff(repo_full_name, False, None)
 
 
-def tag_pattern_diff(gh, repo_full_name, tag_pattern, head):
+def tag_pattern_diff(gh, repo_full_name, tag_pattern, head, exclude_pattern):
     # note that this gets tags in gh order, then picks the first matching one.
     # this can choose an incorrect release since github returns them in alphabetical order,
     # but it's often the correct one.
@@ -101,6 +112,6 @@ def tag_pattern_diff(gh, repo_full_name, tag_pattern, head):
             break
 
     if tag_name:
-        return two_branch_diff(gh, repo_full_name, tag_name, head)
+        return two_branch_diff(gh, repo_full_name, tag_name, head, exclude_pattern)
 
     return ReleaseDiff(repo_full_name, False, None)

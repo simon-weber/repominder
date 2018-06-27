@@ -75,6 +75,7 @@ def userrepo_details(request, id):
         fields.append('tag_pattern')
     else:
         raise SuspiciousOperation("unrecognized style")
+    fields.append('exclude_pattern')
 
     WatchForm = modelform_factory(ReleaseWatch, fields=fields)
 

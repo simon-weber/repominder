@@ -2,7 +2,7 @@ PyGithub
 dj-static
 django-bootstrap3
 django-supervisor
-django==1.11.7
+django
 djmail
 futures
 gevent

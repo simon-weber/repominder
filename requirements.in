@@ -1,0 +1,16 @@
+PyGithub
+dj-static
+django-bootstrap3
+django-supervisor
+django==1.11.7
+djmail
+futures
+gevent
+gunicorn
+gunicorn
+mailchimp3
+newrelic
+raven
+requests
+social-auth-app-django
+sparkpost

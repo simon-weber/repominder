@@ -1,7 +1,8 @@
 .vagrant
 venv-*
 *.pyc
-alpha_rsa
+alpha_rsa*
+gcp_rm_rsa*
 ops/*.tar
 
 *.sqlite3

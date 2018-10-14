@@ -7,9 +7,9 @@
   tasks:
     - name: shut down an existing djsupervisor
       command: "{{ venv }}/exec python manage.py supervisor shutdown"
+      ignore_errors: yes
       args:
           chdir: "{{ appdir }}"
-          ignore_errors: yes
 
     - name: restore database
       sudo: true

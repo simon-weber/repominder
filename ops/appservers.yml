@@ -8,6 +8,7 @@
       - pydrive_key: "{{ lookup('file', '../secrets/pydriveprivatekey.pem') }}"
   roles:
     - role: common
+    - ANXS.python
     - role: Stouts.backup
       sudo: true
       tags: backup
@@ -22,5 +23,4 @@
              - "{{ venv }}"
           target: "pydrive://{{ pydrive_user }}/repominder_backups/db3"
           action: 'backup_verify_purge --force'
-    - ANXS.python
     - runapp

@@ -19,7 +19,5 @@
       tags: logentries
     - role: Oefenweb.fail2ban
       sudo: true
-    - role: sivel.newrelic
-      sudo: true
     - role: geerlingguy.firewall
       sudo: true

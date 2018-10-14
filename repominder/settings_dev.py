@@ -24,3 +24,8 @@ SOCIAL_AUTH_GITHUB_SECRET = get_secret('github_oauth_client_secret-dev.txt')
 DJMAIL_REAL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 RAVEN_CONFIG.pop('dsn')
+
+# serve static files without nginx in dev
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)

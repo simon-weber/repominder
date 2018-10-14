@@ -10,7 +10,7 @@ You can use it at [https://www.repominder.com](https://www.repominder.com).
 * repominder/lib: non-django code
 * ops: ansible config (3rd party roles vendorized)
 * secrets: prod secrets (managed with transcypt)
-* assets: served with dj-static (not nginx because I'm lazy)
+* assets: served with nginx (django locally)
 
 ## development
 

@@ -13,14 +13,14 @@
       sudo: true
       tags: backup
       backup_profiles:
-        - name: repominder_db3
-          schedule: "0 18 * * *"
+        - name: repominder_db4
+          schedule: "0 23 * * *"
           source: "{{ approot }}"
           exclude:
              - "{{ assetdir }}"
              - "{{ appdir }}"
              - "{{ deploydir }}"
              - "{{ venv }}"
-          target: "pydrive://{{ pydrive_user }}/repominder_backups/db3"
+          target: "pydrive://{{ pydrive_user }}/repominder_backups/db4"
           action: 'backup_verify_purge --force'
     - runapp

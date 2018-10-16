@@ -13,7 +13,7 @@
 
     - name: restore database
       sudo: true
-      command: "duply repominder_db3 restore --force"
+      command: "duply repominder_db4 restore --force"
       register: duply_result
 
     - debug: var=duply_result

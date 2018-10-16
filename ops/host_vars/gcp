@@ -12,7 +12,7 @@ logentries_logs:
   - name: nginx_error
     path: /var/log/nginx/error.log
   - name: backups
-    path: /var/log/duply/repominder_db3.log
+    path: /var/log/duply/repominder_db4.log
   - name: supervisor_main
     path: /var/log/supervisord/supervisord.log
   - name: supervisor_webserver

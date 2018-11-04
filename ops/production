@@ -1,4 +1,3 @@
-# alpha ansible_port=54000 ansible_ssh_host=107.161.91.119 ansible_ssh_private_key_file=alpha_rsa
 gcp ansible_port=54000 ansible_ssh_host=35.185.115.97 ansible_ssh_private_key_file=gcp_rm_rsa
 
 [appservers]

@@ -46,7 +46,7 @@ pytz==2018.5
 PyYAML==3.12              # via ansible, watchdog
 raven==6.3.0
 requests-oauthlib==0.8.0
-requests==2.18.4
+requests==2.20.1
 six==1.11.0
 social-auth-app-django==2.0.0
 social-auth-core==1.5.0

@@ -29,7 +29,7 @@ pytz==2018.5              # via django
 PyYAML==3.12              # via watchdog
 raven==6.3.0
 requests-oauthlib==0.8.0  # via social-auth-core
-requests==2.18.4
+requests==2.20.1
 six==1.11.0               # via social-auth-app-django, social-auth-core
 social-auth-app-django==2.0.0
 social-auth-core==1.5.0   # via social-auth-app-django

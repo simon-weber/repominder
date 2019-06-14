@@ -8,7 +8,8 @@ You can use it at [https://www.repominder.com](https://www.repominder.com).
 
 * repominder/apps/core: main django app
 * repominder/lib: non-django code
-* ops: ansible config (3rd party roles vendorized)
+* nix: server config management
+* ansible: app deployment
 * secrets: prod secrets (managed with transcypt)
 * assets: served with nginx (django locally)
 

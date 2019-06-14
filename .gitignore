@@ -2,7 +2,8 @@
 venv-*
 *.pyc
 gcp_rm_rsa*
-ops/*.tar
+nix_rsa*
+ansible/*.tar
 
 *.sqlite3
 supervisord.log

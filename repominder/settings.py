@@ -223,6 +223,8 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_GITHUB_KEY = '26c2b5da7746008ddc28'
 SOCIAL_AUTH_GITHUB_SECRET = get_secret('github_oauth_client_secret.txt')
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']

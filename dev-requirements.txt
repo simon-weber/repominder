@@ -5,7 +5,6 @@
 #    pip-compile dev-requirements.in
 #
 ansible==2.8.1
-argh==0.26.2
 asn1crypto==0.24.0        # via cryptography
 certifi==2017.11.5
 cffi==1.11.5              # via cryptography
@@ -14,7 +13,6 @@ click==7.0                # via pip-tools
 contextlib2==0.5.5
 cryptography==2.3.1       # via ansible
 django-bootstrap3==9.1.0
-django-supervisor==0.4.0
 django==1.11.22
 djmail==1.0.1
 enum34==1.1.6             # via cryptography
@@ -27,17 +25,15 @@ ipaddress==1.0.22         # via cryptography
 jinja2==2.10              # via ansible
 mailchimp3==2.0.18
 markupsafe==1.0           # via jinja2
-meld3==1.0.2
 newrelic==2.96.0.80
 oauthlib==2.0.6
-pathtools==0.1.2
 pip-tools==3.8.0
 pycparser==2.19           # via cffi
 pygithub==1.35
 pyjwt==1.5.3
 python-openid==2.2.5
 pytz==2018.5
-pyyaml==3.12
+pyyaml==3.12              # via ansible
 raven==6.3.0
 requests-oauthlib==0.8.0
 requests==2.20.1
@@ -45,6 +41,4 @@ six==1.11.0
 social-auth-app-django==2.0.0
 social-auth-core==1.5.0
 sparkpost==1.3.5
-supervisor==3.3.3
 urllib3==1.23
-watchdog==0.8.3

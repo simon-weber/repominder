@@ -1,6 +1,5 @@
 PyGithub
 django-bootstrap3
-django-supervisor
 django
 djmail
 futures

@@ -7,8 +7,6 @@ nix_rsa*
 ansible/*.tar
 
 *.sqlite3
-supervisord.log
-supervisord.pid
 *.cer
 
 

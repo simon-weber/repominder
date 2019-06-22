@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 
     'bootstrap3',
     'djmail',
-    'djsupervisor',
     'raven.contrib.django.raven_compat',
     'social_django',
 ]

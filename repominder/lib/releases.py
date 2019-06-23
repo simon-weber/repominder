@@ -1,10 +1,13 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import base64
 from collections import namedtuple
 import fnmatch
 import json
 import logging
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import django
 django.setup()
@@ -33,7 +36,7 @@ def get_badge_url(request, releasewatch):
         ('link', request.build_absolute_uri('/')),
     ]
 
-    url = "%s?%s" % (BADGE_URL, urllib.urlencode(params))
+    url = "%s?%s" % (BADGE_URL, urllib.parse.urlencode(params))
     logger.info("%s selector, url: %s %s", releasewatch, selector, url)
 
     return url

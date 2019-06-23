@@ -2,8 +2,7 @@ PyGithub
 django-bootstrap3
 django
 djmail
-futures
-gevent
+gevent==1.4.0
 gunicorn
 gunicorn
 mailchimp3

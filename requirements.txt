@@ -10,7 +10,7 @@ chardet==3.0.4            # via requests
 contextlib2==0.5.5        # via raven
 django-bootstrap3==9.1.0
 django-supervisor==0.4.0
-django==1.11.20
+django==1.11.22
 djmail==1.0.1
 futures==3.2.0
 gevent==1.2.2

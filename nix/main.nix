@@ -182,6 +182,7 @@ in let
   };
   in {
     network.description = "repominder";
+    network.enableRollback = true;
     virtualbox = genericConf;
     bvm-lv-1 = genericConf;
   }

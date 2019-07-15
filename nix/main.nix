@@ -169,6 +169,8 @@ in let
     nixpkgs.overlays = [ (self: super: {
        duplicity = super.duplicity.overrideAttrs (oldAttrs: { 
          propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ (pydrive pkgs).packages.PyDrive ];
+         doCheck = false;
+         doInstallCheck = false;
        });
      }
     )];

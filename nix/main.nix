@@ -1,6 +1,7 @@
 let
   pydrive = pkgs: import ./pydrive.nix {inherit pkgs;};
   duplKey = builtins.readFile ../secrets/pydriveprivatekey.pem;
+  dbPath = "/opt/repominder/repominder_db.sqlite3";
 in let
   genericConf = { config, pkgs, ... }: {
     services.nginx = {
@@ -55,12 +56,17 @@ in let
     };
     services.duplicity = {
       enable = true;
-      root = "/opt/repominder/repominder_db.sqlite3";
-      targetUrl = "pydrive://duply-alpha@repominder.iam.gserviceaccount.com/repominder_backups/db6";
+      root = "/tmp/db.backup";
+      targetUrl = "pydrive://duply-alpha@repominder.iam.gserviceaccount.com/repominder_backups/db7";
       secretFile = pkgs.writeText "dupl.env" ''
         GOOGLE_DRIVE_ACCOUNT_KEY="${duplKey}"
         '';
       extraFlags = ["--no-encryption"];
+    };
+    systemd.services.duplicity = {
+      path = [ pkgs.bash pkgs.sqlite ];
+      preStart = ''sqlite3 ${dbPath} ".backup /tmp/db.backup"'';
+      postStop = "rm /tmp/db.backup";
     };
     systemd.services.repominder = {
       description = "Repominder application";
@@ -119,6 +125,7 @@ in let
     )];
 
     environment.systemPackages = with pkgs; [
+      sqlite
       duplicity
       vim
       (python27.withPackages(ps: with ps; [ virtualenv pip ]))

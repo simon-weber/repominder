@@ -18,6 +18,11 @@
       register: migrate_result
       changed_when: 'migrate_result.stdout is defined and "No migrations to apply." not in migrate_result.stdout'
 
+    - name: collectstatic
+      command: "{{ venv }}/exec python manage.py collectstatic -c --noinput"
+      args:
+          chdir: "{{ appdir }}"
+
     - name: check for superuser
       shell: >
         echo "from django.db import DEFAULT_DB_ALIAS as database;
@@ -40,11 +45,23 @@
           chdir: "{{ appdir }}"
       when: not "True" in superuser_present.stdout
 
+  #    - name: set site details
+  #      shell: >
+  #        echo "from django.contrib.sites.models import Site;
+  #        s = Site.objects.get_current();
+  #        s.domain = 'www.plugserv.com';
+  #        s.name = 'plugserv';
+  #        s.save();
+  #        print(Site.objects.get_current())"
+  #        | {{ venv }}/exec python manage.py shell
+  #      args:
+  #          chdir: "{{ appdir }}"
+
     - name: start app service
       systemd:
         state: started
         daemon_reload: yes
-        name: repominder
+        name: "{{ appname }}"
 
     - name: clean up deploy tars
       shell: "rm -rf {{ deploydir }}/*"

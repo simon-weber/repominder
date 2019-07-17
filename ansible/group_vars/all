@@ -1,7 +1,8 @@
-approot: "/opt/repominder"
-appdir: "/opt/repominder/code"
+appname: repominder
+approot: "/opt/{{ appname }}"
+appdir: "{{ approot }}/code"
 venv: "{{ approot }}/venv"
 assetdir: "{{ approot }}/assets"
 deploydir: "{{ approot }}/deploy"
-appuser: repominder
-appgroup: repominder
+appuser: "{{ appname }}"
+appgroup: "{{ appname }}"

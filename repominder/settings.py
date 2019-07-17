@@ -96,8 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'repominder.wsgi.application'
 
-SUPERVISOR_LOG_DIR = '/var/log/supervisord'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -161,8 +159,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-# nginx in prod
 STATIC_URL = '/assets/'
+STATIC_ROOT = os.path.join(BASE_DIR, '..', 'assets')
 
 LOGGING = {
     'version': 1,

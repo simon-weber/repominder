@@ -11,7 +11,6 @@ You can use it at [https://www.repominder.com](https://www.repominder.com).
 * nix: server config management
 * ansible: app deployment
 * secrets: prod secrets (managed with transcypt)
-* assets: served with nginx (django locally)
 
 ## development
 

@@ -16,7 +16,7 @@ You can use it at [https://www.repominder.com](https://www.repominder.com).
 
 To create a new dev environment:
 
-* create a new virtualenv
+* create a new python 3 virtualenv
 * `pip install -r dev-requirements.txt`
 * `DJANGO_SETTINGS_MODULE=repominder.settings_dev python manage.py migrate`
 

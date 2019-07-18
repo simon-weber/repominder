@@ -8,9 +8,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
-    replaces = [(b'core', '0001_initial'), (b'core', '0002_auto_20171111_2234'), (b'core', '0003_auto_20171111_2323'), (b'core', '0004_auto_20171112_0313'), (b'core', '0005_profile'), (b'core', '0006_auto_20171114_0200'), (b'core', '0007_auto_20171114_0238'), (b'core', '0008_auto_20171117_2014'), (b'core', '0009_auto_20171118_1617'), (b'core', '0010_auto_20171118_1620'), (b'core', '0011_auto_20171119_0355'), (b'core', '0012_auto_20171119_1520'), (b'core', '0013_auto_20171119_1741')]
-
     initial = True
 
     dependencies = [

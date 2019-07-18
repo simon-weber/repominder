@@ -2,8 +2,7 @@ PyGithub
 django-bootstrap3
 django
 djmail
-gevent==1.4.0
-gunicorn
+gevent
 gunicorn
 mailchimp3
 newrelic

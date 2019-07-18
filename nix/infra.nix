@@ -32,6 +32,6 @@
         [ { device = "/dev/disk/by-uuid/cd94282c-8684-4a91-bfde-b6110e27b2fd"; }
         ];
       nix.maxJobs = lib.mkDefault 1;
-      virtualisation.hypervGuest.enable = true;
+      virtualisation.hypervGuest.enable = false;
     };
 }

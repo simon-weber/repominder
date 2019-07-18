@@ -9,10 +9,10 @@ class Repo(models.Model):
     full_name = models.CharField(max_length=256)
     users = models.ManyToManyField(User, through='UserRepo')
 
-    def __unicode__(self):
+    def __str__(self):
         return "<Repo: %s>" % self.full_name
 
-    __repr__ = __unicode__
+    __repr__ = __str__
 
 
 class UserRepo(models.Model):
@@ -22,10 +22,10 @@ class UserRepo(models.Model):
     class Meta:
         unique_together = (("repo", "user"),)
 
-    def __unicode__(self):
+    def __str__(self):
         return "<UserRepo(%s): %s, %s>" % (self.id, self.user.username, self.repo.full_name)
 
-    __repr__ = __unicode__
+    __repr__ = __str__
 
 
 class ReleaseWatch(models.Model):
@@ -72,7 +72,7 @@ class ReleaseWatch(models.Model):
         )
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return "<ReleaseWatch(%s): %s %s>" % (self.id, self.userrepo.repo.full_name, self.style)
 
-    __repr__ = __unicode__
+    __repr__ = __str__

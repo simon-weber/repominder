@@ -80,7 +80,7 @@ in let
       description = "Repominder application";
       after = [ "network-online.target" ];
       wantedBy = [ "network-online.target" ];
-      path = [ pkgs.python27 pkgs.bash ];
+      path = [ pkgs.python37 pkgs.bash ];
       environment = {
         PYTHONHASHSEED = "random";
       };
@@ -96,7 +96,7 @@ in let
       description = "Repominder weekly notifications";
       startAt = "weekly";
       after = [ "network-online.target" ];
-      path = [ pkgs.python27 pkgs.bash ];
+      path = [ pkgs.python37 pkgs.bash ];
       environment = {
         DJANGO_SETTINGS_MODULE = "repominder.settings";
         PYTHONHASHSEED = "random";
@@ -136,7 +136,7 @@ in let
       sqlite
       duplicity
       vim
-      (python27.withPackages(ps: with ps; [ virtualenv pip ]))
+      (python37.withPackages(ps: with ps; [ virtualenv pip ]))
     ];
   };
   in {

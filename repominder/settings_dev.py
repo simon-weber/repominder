@@ -5,7 +5,7 @@ SECRET_KEY = 'dev_secret_key'
 
 SCHEME = 'http://'
 HOST = '127.0.0.1'
-ALLOWED_HOSTS = [HOST]
+ALLOWED_HOSTS = ['*']
 PORT = 8000
 
 SESSION_COOKIE_SECURE = False

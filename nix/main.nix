@@ -44,8 +44,8 @@ in let
         journalbeat.inputs:
         - paths: ["/var/log/journal"]
           include_matches:
-            - "_SYSTEMD_UNIT=acme-www.repominder.com.service"
-            - "_SYSTEMD_UNIT=duplicity.service"
+            - "UNIT=acme-www.repominder.com.service"
+            - "UNIT=duplicity.service"
             - "_SYSTEMD_UNIT=nginx.service"
             - "_SYSTEMD_UNIT=repominder.service"
             - "_SYSTEMD_UNIT=repominder_notify.service"

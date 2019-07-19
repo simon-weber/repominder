@@ -108,14 +108,9 @@ DATABASES = {
 
 # Email
 EMAIL_BACKEND = 'djmail.backends.async.EmailBackend'
-DJMAIL_REAL_BACKEND = 'sparkpost.django.email_backend.SparkPostEmailBackend'
-SPARKPOST_API_KEY = get_secret('sparkpost.password')
-SPARKPOST_OPTIONS = {
-    'track_opens': True,
-    'track_clicks': False,
-    'transactional': True,
-    'return_path': 'bounce@bounces.repominder.com',
-}
+DJMAIL_REAL_BACKEND = 'django_amazon_ses.EmailBackend'
+AWS_ACCESS_KEY_ID = get_secret('ses.id')
+AWS_SECRET_ACCESS_KEY = get_secret('ses.key')
 DEFAULT_FROM_EMAIL = 'Repominder <noreply@repominder.com>'
 
 ADMINS = (('Simon', 'simon@simonmweber.com'),)

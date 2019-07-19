@@ -1,6 +1,7 @@
 PyGithub
-django-bootstrap3
 django
+django-amazon-ses
+django-bootstrap3
 djmail
 gevent
 gunicorn
@@ -9,4 +10,3 @@ newrelic
 raven
 requests
 social-auth-app-django
-sparkpost

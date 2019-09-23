@@ -73,9 +73,9 @@ in let
       extraFlags = ["--no-encryption"];
     };
     systemd.services.duplicity = {
-      path = [ pkgs.bash pkgs.sqlite ];
+      path = [ pkgs.bash pkgs.sqlite pkgs.curl ];
       preStart = ''sqlite3 ${dbPath} ".backup /tmp/db.backup"'';
-      postStop = "rm /tmp/db.backup";
+      postStop = ''rm /tmp/db.backup; curl -L -H 'Content-Type: application/json' -d "{\"localtime\": $(date +\"%s\"), \"successful\": $([ "$EXIT_STATUS" == 0 ] && echo "true" || echo "false"), \"message\": \"$EXIT_STATUS\"}" https://script.google.com/macros/s/AKfycbwbk-fT4NGCo9OIeQjzl7MOc4r59q8E4GcCe6JAfQ/exec'';
     };
     systemd.services.repominder = {
       description = "Repominder application";
@@ -134,8 +134,9 @@ in let
     )];
 
     environment.systemPackages = with pkgs; [
-      sqlite
+      curl
       duplicity
+      sqlite
       vim
       (python37.withPackages(ps: with ps; [ virtualenv pip ]))
     ];

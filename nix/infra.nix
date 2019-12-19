@@ -8,15 +8,14 @@
     };
   bvm-lv-1 =
     { config, lib, pkgs, ... }:
-    { deployment.targetHost = "209.141.57.192";
+    { deployment.targetHost = "delta.simon.codes";
 
       # from generated configuration.nix
       boot.loader.grub.device = "/dev/vda";
       boot.loader.grub.enable = true;
       boot.loader.grub.version = 2;
       services.openssh.enable = true;
-      services.openssh.permitRootLogin = "yes";
-      # networking.firewall.allowedTCPPorts = [ 22 ];
+      services.openssh.permitRootLogin = "prohibit-password";
       system.stateVersion = "18.09";
 
 

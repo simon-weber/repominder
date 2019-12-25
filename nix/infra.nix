@@ -6,9 +6,10 @@
       deployment.virtualbox.vcpu = 2; # number of cpus
       deployment.virtualbox.headless = true;
     };
-  bvm-lv-1 =
+  delta-simon-codes =
     { config, lib, pkgs, ... }:
     { deployment.targetHost = "delta.simon.codes";
+      networking.hostName = "delta.simon.codes";
 
       # from generated configuration.nix
       boot.loader.grub.device = "/dev/vda";
@@ -18,18 +19,20 @@
       services.openssh.permitRootLogin = "prohibit-password";
       system.stateVersion = "18.09";
 
-
       # from generated hardware-configuration.nix
       boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
       boot.kernelModules = [ ];
       boot.extraModulePackages = [ ];
+
       fileSystems."/" =
         { device = "/dev/disk/by-uuid/cd3d8aa2-8626-4d28-be4a-322935cd60a5";
           fsType = "ext4";
         };
+
       swapDevices =
         [ { device = "/dev/disk/by-uuid/cd94282c-8684-4a91-bfde-b6110e27b2fd"; }
         ];
+
       nix.maxJobs = lib.mkDefault 1;
       virtualisation.hypervGuest.enable = false;
     };

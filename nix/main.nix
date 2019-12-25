@@ -3,6 +3,31 @@ let
   dbPath = "/opt/repominder/repominder_db.sqlite3";
 in let
   genericConf = { config, pkgs, ... }: {
+
+    virtualisation.docker = {
+      enable = true;
+      logDriver = "journald";
+    };
+    docker-containers.repominder = {
+      image = "repominder:latest";
+      ports = [ "127.0.0.1:8000:8000" ];
+      volumes = [ "/opt/repominder:/opt/repominder" ];
+    };
+
+    docker-containers.repominder_notify = {
+      image = "repominder:latest";
+      volumes = [ "/opt/repominder:/opt/repominder" ];
+      entrypoint = "python";
+      cmd = [ "send_notifications.py" ];
+    };
+    systemd.services.docker-repominder_notify = {
+      startAt = "weekly";
+      wantedBy = pkgs.lib.mkForce [];
+      serviceConfig = {
+        Restart = pkgs.lib.mkForce "no";
+      };
+    };
+
     services.nginx = {
       enable = true;
       recommendedGzipSettings = true;
@@ -37,6 +62,8 @@ in let
         access_log syslog:server=unix:/dev/log combined;
       '';
     };
+
+    # TODO log collection seems to be working only sometimes, eg not for notifications
     services.journalbeat = {
       enable = true;
       extraConfig = ''
@@ -45,11 +72,12 @@ in let
           include_matches:
             - "UNIT=acme-www.repominder.com.service"
             - "UNIT=duplicity.service"
+            - "UNIT=docker-repominder.service"
+            - "UNIT=docker-repominder_notify.service"
             - "_SYSTEMD_UNIT=nginx.service"
-            - "_SYSTEMD_UNIT=repominder.service"
-            - "_SYSTEMD_UNIT=repominder_notify.service"
+            - "_SYSTEMD_UNIT=docker-repominder.service"
+            - "_STSTEMD_UNIT=docker-repominder_notify.service"
             - "_SYSTEMD_UNIT=sshd.service"
-
         output:
          elasticsearch:
            hosts: ["https://cloud.humio.com:443/api/v1/ingest/elastic-bulk"]
@@ -61,6 +89,7 @@ in let
            template.enabled: false
       '';
     };
+
     services.duplicity = {
       enable = true;
       frequency = "*-*-* 00,12:00:00";
@@ -76,46 +105,19 @@ in let
       preStart = ''sqlite3 ${dbPath} ".backup /tmp/db.backup"'';
       postStop = ''rm /tmp/db.backup; curl -L -H 'Content-Type: application/json' -d "{\"localtime\": $(date +\"%s\"), \"successful\": $([ "$EXIT_STATUS" == 0 ] && echo "true" || echo "false"), \"message\": \"$EXIT_STATUS\"}" https://script.google.com/macros/s/AKfycbwbk-fT4NGCo9OIeQjzl7MOc4r59q8E4GcCe6JAfQ/exec'';
     };
-    systemd.services.repominder = {
-      description = "Repominder application";
-      after = [ "network-online.target" ];
-      wantedBy = [ "network-online.target" ];
-      path = [ pkgs.python37 pkgs.bash ];
-      environment = {
-        PYTHONHASHSEED = "random";
-      };
-      serviceConfig = {
-        WorkingDirectory = "/opt/repominder/code";
-        ExecStart = "/opt/repominder/venv/exec gunicorn --worker-class gevent repominder.wsgi -b '127.0.0.1:8000'";
-        Restart = "always";
-        User = "repominder";
-        Group = "repominder";
-      };
-    };
-    systemd.services.repominder_notify = {
-      description = "Repominder weekly notifications";
-      startAt = "weekly";
-      after = [ "network-online.target" ];
-      path = [ pkgs.python37 pkgs.bash ];
-      environment = {
-        DJANGO_SETTINGS_MODULE = "repominder.settings";
-        PYTHONHASHSEED = "random";
-      };
-      serviceConfig = {
-        WorkingDirectory = "/opt/repominder/code";
-        ExecStart = "/opt/repominder/venv/exec python send_notifications.py";
-        User = "repominder";
-        Group = "repominder";
-      };
-    };
-    
+
     users = {
+      users.root.extraGroups = [ "docker" ];
       users.root.openssh.authorizedKeys.keyFiles = [ ../../.ssh/id_rsa.pub ];
       users.repominder = {
         group = "repominder";
         isSystemUser = true;
+        uid = 497;
       };
-      groups.repominder.members = [ "repominder" "nginx" ];
+      groups.repominder = {
+        members = [ "repominder" "nginx" ];
+        gid = 499;
+      };
     };
 
     networking.firewall.allowedTCPPorts = [ 22 80 443 ];
@@ -136,12 +138,12 @@ in let
       duplicity
       sqlite
       vim
-      (python37.withPackages(ps: with ps; [ virtualenv pip ]))
+      python3  # for ansible
     ];
   };
   in {
     network.description = "repominder";
     network.enableRollback = true;
     virtualbox = genericConf;
-    bvm-lv-1 = genericConf;
+    delta-simon-codes = genericConf;
   }

@@ -1,3 +1,5 @@
+docker-archive.tar
+
 .env
 .vagrant
 venv-*
@@ -5,7 +7,6 @@ venv-*
 gcp_rm_rsa*
 nix_rsa*
 ansible/*.tar
-
 *.sqlite3
 *.cer
 

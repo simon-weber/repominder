@@ -1,8 +1,16 @@
 let
   duplKey = builtins.readFile ../secrets/pydriveprivatekey.pem;
   dbPath = "/opt/repominder/repominder_db.sqlite3";
+  logUnitYaml = lib: builtins.toJSON (lib.lists.flatten (builtins.map (x: [ "UNIT=${x}" "_SYSTEMD_UNIT=${x}" ]) [
+    "acme-www.repominder.com.service"
+    "duplicity.service"
+    "docker-repominder.service"
+    "docker-repominder_notify.service"
+    "nginx.service"
+    "sshd.service"
+  ]));
 in let
-  genericConf = { config, pkgs, ... }: {
+  genericConf = { config, pkgs, lib, ... }: {
 
     virtualisation.docker = {
       enable = true;
@@ -69,15 +77,7 @@ in let
       extraConfig = ''
         journalbeat.inputs:
         - paths: ["/var/log/journal"]
-          include_matches:
-            - "UNIT=acme-www.repominder.com.service"
-            - "UNIT=duplicity.service"
-            - "UNIT=docker-repominder.service"
-            - "UNIT=docker-repominder_notify.service"
-            - "_SYSTEMD_UNIT=nginx.service"
-            - "_SYSTEMD_UNIT=docker-repominder.service"
-            - "_STSTEMD_UNIT=docker-repominder_notify.service"
-            - "_SYSTEMD_UNIT=sshd.service"
+          include_matches: ${(logUnitYaml lib)}
         output:
          elasticsearch:
            hosts: ["https://cloud.humio.com:443/api/v1/ingest/elastic-bulk"]

@@ -94,7 +94,7 @@ in let
       enable = true;
       frequency = "*-*-* 00,12:00:00";
       root = "/tmp/db.backup";
-      targetUrl = "pydrive://duply-alpha@repominder.iam.gserviceaccount.com/repominder_backups/db7";
+      targetUrl = "pydrive://duply-alpha@repominder.iam.gserviceaccount.com/repominder_backups/db8";
       secretFile = pkgs.writeText "dupl.env" ''
         GOOGLE_DRIVE_ACCOUNT_KEY="${duplKey}"
         '';

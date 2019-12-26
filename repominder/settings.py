@@ -29,6 +29,8 @@ SCHEME = 'https://'
 HOST = 'www.repominder.com'
 ALLOWED_HOSTS = [HOST]
 PORT = 8000
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 try:
     with open(os.path.join(BASE_DIR, 'release.sha')) as f:

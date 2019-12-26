@@ -6,6 +6,7 @@
   tasks:
     - name: perform migrations
       command: "docker run {{ dockerargs }} {{ appname }}:staging python manage.py migrate --noinput"
+      register: migrate_result
       changed_when: 'migrate_result.stdout is defined and "No migrations to apply." not in migrate_result.stdout'
 
     - name: collectstatic

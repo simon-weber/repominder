@@ -25,9 +25,7 @@
         group: "{{ appgroup }}"
         mode: 0750
       with_items:
-        - "{{ appdir }}"
         - "{{ assetdir }}"
-        - "{{ deploydir }}"
 
     - name: create stash to archive working copy
       local_action: command git stash create
@@ -64,19 +62,6 @@
 
     - name: tag remote image
       command: docker tag {{ gitlab_repo }}/{{ appname }}:staging {{ appname }}:staging
-
-      #    - name: save container
-      #      local_action: shell set -o pipefail && docker save {{ appname }}:{{ revparse.stdout }} {{ appname }}:staging | gzip > ansible/{{ revparse.stdout }}.tar.gz
-      #      args:
-      #        chdir: ..
-      #        executable: /bin/bash
-      #      run_once: true
-      #
-      #    - name: push container
-      #      copy: src={{revparse.stdout}}.tar.gz dest={{ deploydir }}/{{ revparse.stdout }}.tar.gz
-      #
-      #    - name: load container
-      #      command: docker load --input {{ deploydir }}/{{ revparse.stdout }}.tar.gz
 
     - name: set app owner
       shell: "chown -R root:{{ appgroup }} {{ approot }}"

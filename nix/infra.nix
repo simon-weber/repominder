@@ -10,7 +10,11 @@
     { config, lib, pkgs, ... }:
     { deployment.targetHost = "delta.simon.codes";
       networking.hostName = "delta.simon.codes";
-      services.openssh.passwordAuthentication = false;
+      services.openssh = {
+        passwordAuthentication = false;
+        challengeResponseAuthentication = false;
+        extraConfig = "AllowUsers root";
+      };
 
       # from generated configuration.nix
       boot.loader.grub.device = "/dev/vda";

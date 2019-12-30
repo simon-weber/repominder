@@ -10,6 +10,9 @@ nix-deploy-prod:
 nix-deploy-dev:
 	nixops deploy --include virtualbox -d repominder
 
+pip-compile:
+	pip-compile -r requirements.in && pip-compile -r dev-requirements.in && pip-sync dev-requirements.txt
+
 # also consider vacuuming the journal:
 #    journalctl --vacuum-size=500M
 # and cleaning old nix generations:

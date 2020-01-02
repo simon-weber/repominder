@@ -32,6 +32,8 @@ def send_email(user, diffs):
 
     lines.append('\n')
     lines.append('To configure your reminders, log in at https://www.repominder.com')
+    lines.append('\n')
+    lines.append('Appreciate Repominder? Consider sponsoring development! https://github.com/sponsors/simon-weber')
 
     email = EmailMessage(
         subject="unreleased changes detected",

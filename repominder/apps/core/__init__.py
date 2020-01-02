@@ -4,6 +4,8 @@ from django.conf import settings
 import requests
 from social_core.pipeline.partial import partial
 
+default_app_config = 'repominder.apps.core.apps.CoreConfig'
+
 logger = logging.getLogger(__name__)
 
 # These happen during every login.

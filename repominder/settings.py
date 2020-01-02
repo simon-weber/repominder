@@ -114,6 +114,7 @@ DJMAIL_REAL_BACKEND = 'django_amazon_ses.EmailBackend'
 AWS_ACCESS_KEY_ID = get_secret('ses.id')
 AWS_SECRET_ACCESS_KEY = get_secret('ses.key')
 DEFAULT_FROM_EMAIL = 'Repominder <noreply@repominder.com>'
+NOREPLY_ADDRESS = 'noreply.zone <noreply@devnull.noreply.zone>'
 
 ADMINS = (('Simon', 'simon@simonmweber.com'),)
 SERVER_EMAIL = DEFAULT_FROM_EMAIL

@@ -20,6 +20,7 @@ DATABASES = {
     }
 }
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 SOCIAL_AUTH_GITHUB_KEY = '9d4d7a7b908b1124523a'
 SOCIAL_AUTH_GITHUB_SECRET = get_secret('github_oauth_client_secret-dev.txt')
 

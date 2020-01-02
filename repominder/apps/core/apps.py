@@ -5,4 +5,7 @@ from django.apps import AppConfig
 
 
 class CoreConfig(AppConfig):
-    name = 'core'
+    name = 'repominder.apps.core'
+
+    def ready(self):
+        from . import signals  # noqa

@@ -11,7 +11,7 @@ chardet==3.0.4            # via requests
 defusedxml==0.6.0         # via python3-openid, social-auth-core
 django-amazon-ses==2.1.1
 django-bootstrap3==9.1.0
-django==1.11.22
+django==1.11.28
 djmail==1.0.1
 docutils==0.14            # via botocore
 gevent==1.4.0

@@ -29,7 +29,7 @@ class UserRepo(models.Model):
 
 
 class ReleaseWatch(models.Model):
-    userrepo = models.OneToOneField(UserRepo)
+    userrepo = models.OneToOneField(UserRepo, on_delete=models.CASCADE)
     dev_branch = models.CharField(
         max_length=256,
         verbose_name='development branch',

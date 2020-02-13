@@ -11,7 +11,7 @@ chardet==3.0.4            # via requests
 defusedxml==0.6.0         # via python3-openid, social-auth-core
 django-amazon-ses==2.1.1
 django-bootstrap3==9.1.0
-django==1.11.22
+django==2.2.10
 djmail==1.0.1
 docutils==0.14            # via botocore
 gevent==1.4.0
@@ -34,4 +34,5 @@ s3transfer==0.2.1         # via boto3
 six==1.11.0               # via python-dateutil, social-auth-app-django, social-auth-core
 social-auth-app-django==2.0.0
 social-auth-core==1.5.0   # via social-auth-app-django
+sqlparse==0.3.0           # via django
 urllib3==1.23             # via botocore, requests

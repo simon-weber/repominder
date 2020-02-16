@@ -34,7 +34,7 @@ def get_badge_url(request, releasewatch):
     ]
 
     url = "%s?%s" % (BADGE_URL, urllib.parse.urlencode(params))
-    logger.info("%s selector, url: %s %s", releasewatch, selector, url)
+    logger.info("%r selector, url: %r %r", releasewatch, selector, url)
 
     return url
 
@@ -43,7 +43,7 @@ def encode_badge_selector(releasewatch):
     return base64.urlsafe_b64encode(json.dumps({
         'user_id': releasewatch.userrepo.user.id,
         'repo_id': releasewatch.userrepo.repo.id,
-    }).encode())
+    }).encode()).decode()
 
 
 def decode_badge_selector(selector):

@@ -104,6 +104,16 @@ in let
       path = [ pkgs.bash pkgs.sqlite pkgs.curl ];
       preStart = ''sqlite3 ${dbPath} ".backup /tmp/db.backup"'';
       postStop = ''rm /tmp/db.backup; curl -L -H 'Content-Type: application/json' -d "{\"localtime\": $(date +\"%s\"), \"successful\": $([ "$EXIT_STATUS" == 0 ] && echo "true" || echo "false"), \"message\": \"$EXIT_STATUS\"}" https://script.google.com/macros/s/AKfycbwbk-fT4NGCo9OIeQjzl7MOc4r59q8E4GcCe6JAfQ/exec'';
+
+      # max 5 retries waiting 30s to work around db locking
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = 30;
+      };
+      unitConfig = {
+        StartLimitInterval = 200;
+        StartLimitBurst = 5;
+      };
     };
 
     users = {

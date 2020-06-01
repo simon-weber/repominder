@@ -4,7 +4,7 @@ DEBUG = True
 SECRET_KEY = 'dev_secret_key'
 
 SCHEME = 'http://'
-HOST = '127.0.0.1'
+HOST = 'samus.simon.codes'
 ALLOWED_HOSTS = ['*']
 PORT = 8000
 USE_X_FORWARDED_HOST = False

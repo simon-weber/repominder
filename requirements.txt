@@ -7,7 +7,9 @@
 boto3==1.9.190            # via django-amazon-ses
 botocore==1.12.190        # via boto3, s3transfer
 certifi==2017.11.5        # via requests
+cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
+cryptography==2.9.2       # via social-auth-core
 defusedxml==0.6.0         # via python3-openid, social-auth-core
 django-amazon-ses==2.1.1
 django-bootstrap3==9.1.0
@@ -22,6 +24,7 @@ jmespath==0.9.4           # via boto3, botocore
 mailchimp3==2.0.18
 newrelic==2.96.0.80
 oauthlib==2.0.6           # via requests-oauthlib, social-auth-core
+pycparser==2.20           # via cffi
 pygithub==1.35
 pyjwt==1.5.3              # via pygithub, social-auth-core
 python-dateutil==2.8.0    # via botocore
@@ -31,8 +34,8 @@ raven==6.3.0
 requests-oauthlib==0.8.0  # via social-auth-core
 requests==2.20.1
 s3transfer==0.2.1         # via boto3
-six==1.11.0               # via python-dateutil, social-auth-app-django, social-auth-core
-social-auth-app-django==2.0.0
-social-auth-core==1.5.0   # via social-auth-app-django
+six==1.11.0               # via cryptography, python-dateutil, social-auth-app-django, social-auth-core
+social-auth-app-django==3.4.0
+social-auth-core==3.3.3   # via social-auth-app-django
 sqlparse==0.3.0           # via django
 urllib3==1.23             # via botocore, requests

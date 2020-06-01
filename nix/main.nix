@@ -111,7 +111,7 @@ in let
         RestartSec = 30;
       };
       unitConfig = {
-        StartLimitInterval = 200;
+        StartLimitIntervalSec = 200;
         StartLimitBurst = 5;
       };
     };

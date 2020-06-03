@@ -9,7 +9,8 @@
   delta-simon-codes =
     { config, lib, pkgs, ... }:
     { deployment.targetHost = "delta.simon.codes";
-      networking.hostName = "delta.simon.codes";
+      networking.hostName = "delta";
+      networking.domain = "simon.codes";
       services.openssh = {
         passwordAuthentication = false;
         challengeResponseAuthentication = false;

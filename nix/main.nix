@@ -154,11 +154,13 @@ in let
       sqlite
       vim
       python3  # for ansible
+      htop
+      iotop
+      sysstat
     ];
   };
   in {
     network.description = "repominder";
     network.enableRollback = true;
-    virtualbox = genericConf;
     delta-simon-codes = genericConf;
   }

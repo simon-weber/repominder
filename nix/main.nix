@@ -7,6 +7,7 @@ let
     "docker.service"
     "docker-repominder.service"
     "docker-repominder_notify.service"
+    "docker-repominder_cleanup.service"
     "nginx.service"
     "sshd.service"
   ]));
@@ -34,6 +35,22 @@ in let
       wantedBy = pkgs.lib.mkForce [];
       serviceConfig = {
         Restart = pkgs.lib.mkForce "no";
+      };
+    };
+    docker-containers.repominder_cleanup = {
+      image = "repominder:latest";
+      volumes = [ "/opt/repominder:/opt/repominder" ];
+      entrypoint = "python";
+      cmd = [ "manage.py" "clearsessions" ];
+    };
+    systemd.services.docker-repominder_cleanup = {
+      startAt = "*-*-* 07:30:00";  # early mornings eastern
+      wantedBy = pkgs.lib.mkForce [];
+      serviceConfig = {
+        Restart = pkgs.lib.mkForce "no";
+        # TODO figure out how to merge these automatically
+        # https://github.com/NixOS/nixpkgs/issues/76620
+        ExecStopPost = pkgs.lib.mkForce [ "-${pkgs.docker}/bin/docker rm -f %n" "${pkgs.sqlite}/bin/sqlite3 ${dbPath} 'VACUUM;'" ];
       };
     };
 

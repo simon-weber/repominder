@@ -46,11 +46,9 @@ in let
     systemd.services.docker-repominder_cleanup = {
       startAt = "*-*-* 07:30:00";  # early mornings eastern
       wantedBy = pkgs.lib.mkForce [];
+      postStop = "${pkgs.sqlite}/bin/sqlite3 ${dbPath} 'VACUUM;'";
       serviceConfig = {
         Restart = pkgs.lib.mkForce "no";
-        # TODO figure out how to merge these automatically
-        # https://github.com/NixOS/nixpkgs/issues/76620
-        ExecStopPost = pkgs.lib.mkForce [ "-${pkgs.docker}/bin/docker rm -f %n" "${pkgs.sqlite}/bin/sqlite3 ${dbPath} 'VACUUM;'" ];
       };
     };
 

@@ -1,6 +1,5 @@
 docker-archive.tar
 
-.env
 .vagrant
 venv-*
 *.pyc

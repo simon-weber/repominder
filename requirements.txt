@@ -13,7 +13,7 @@ cryptography==2.9.2       # via social-auth-core
 defusedxml==0.6.0         # via python3-openid, social-auth-core
 django-amazon-ses==2.1.1  # via -r requirements.in
 django-bootstrap3==9.1.0  # via -r requirements.in
-django==2.2.10            # via -r requirements.in, django-amazon-ses
+django==2.2.16            # via -r requirements.in, django-amazon-ses
 djmail==1.0.1             # via -r requirements.in
 docutils==0.14            # via botocore
 gevent==1.4.0             # via -r requirements.in

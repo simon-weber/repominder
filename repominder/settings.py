@@ -213,9 +213,11 @@ LOGGING = {
 }
 
 
+LOGIN_REDIRECT_URL = '/account/'
+
 # python-social-auth
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.github.GithubAppAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 

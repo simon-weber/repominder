@@ -56,7 +56,7 @@ class ReleaseDiff(namedtuple('ReleaseDiff', ['repo_name', 'has_changes', 'compar
     @staticmethod
     def from_releasewatch(releasewatch):
         user = releasewatch.userrepo.user
-        social = user.social_auth.get(provider='github')
+        social = user.social_auth.get(provider='github-app')
         token = social.extra_data['access_token']
 
         gh = Github(token)

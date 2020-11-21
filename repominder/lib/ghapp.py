@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def cache_repos(user):
     # TODO this isn't really generic
-    social = user.social_auth.get(provider='github')
+    social = user.social_auth.get(provider='github-app')
 
     gh = Github(social.extra_data['access_token'])
     repos = gh.get_user().get_repos()

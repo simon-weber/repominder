@@ -13,6 +13,7 @@ chardet==3.0.4            # via -r requirements.txt, requests
 click==7.0                # via pip-tools
 cryptography==2.9.2       # via -r requirements.txt, ansible, social-auth-core
 defusedxml==0.6.0         # via -r requirements.txt, python3-openid, social-auth-core
+deprecated==1.2.10        # via -r requirements.txt, pygithub
 django-amazon-ses==2.1.1  # via -r requirements.txt
 django-bootstrap3==9.1.0  # via -r requirements.txt
 django==2.2.16            # via -r requirements.txt, django-amazon-ses
@@ -30,7 +31,7 @@ newrelic==2.96.0.80       # via -r requirements.txt
 oauthlib==2.0.6           # via -r requirements.txt, requests-oauthlib, social-auth-core
 pip-tools==5.3.1          # via -r dev-requirements.in
 pycparser==2.20           # via -r requirements.txt, cffi
-pygithub==1.35            # via -r requirements.txt
+pygithub==1.53            # via -r requirements.txt
 pyjwt==1.5.3              # via -r requirements.txt, pygithub, social-auth-core
 python-dateutil==2.8.0    # via -r requirements.txt, botocore
 python3-openid==3.1.0     # via -r requirements.txt, social-auth-core
@@ -38,13 +39,14 @@ pytz==2018.5              # via -r requirements.txt, django
 pyyaml==3.12              # via ansible
 raven==6.3.0              # via -r requirements.txt
 requests-oauthlib==0.8.0  # via -r requirements.txt, social-auth-core
-requests==2.20.1          # via -r requirements.txt, mailchimp3, requests-oauthlib, social-auth-core
+requests==2.20.1          # via -r requirements.txt, mailchimp3, pygithub, requests-oauthlib, social-auth-core
 s3transfer==0.2.1         # via -r requirements.txt, boto3
 six==1.11.0               # via -r requirements.txt, cryptography, pip-tools, python-dateutil, social-auth-app-django, social-auth-core
 social-auth-app-django==3.4.0  # via -r requirements.txt
 social-auth-core==3.3.3   # via -r requirements.txt, social-auth-app-django
 sqlparse==0.3.0           # via -r requirements.txt, django
 urllib3==1.23             # via -r requirements.txt, botocore, requests
+wrapt==1.12.1             # via -r requirements.txt, deprecated
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

@@ -10,6 +10,7 @@ import django
 django.setup()
 
 from django.urls import reverse
+from django.conf import settings
 from github import Github
 
 from repominder.apps.core.models import ReleaseWatch
@@ -54,17 +55,17 @@ class ReleaseDiff(namedtuple('ReleaseDiff', ['repo_name', 'has_changes', 'compar
 
     @staticmethod
     def from_releasewatch(releasewatch):
-        user = releasewatch.userrepo.user
-        social = user.social_auth.get(provider='github-app')
-        token = social.extra_data['access_token']
+        from .ghapp import get_installation_token
+        installation = releasewatch.repo.installations.first()
+        token = get_installation_token(installation, settings.GH_APP_ID, settings.GH_APP_PEM)
 
         gh = Github(token)
 
         if releasewatch.style == ReleaseWatch.DUAL_BRANCH:
-            return two_branch_diff(gh, releasewatch.userrepo.repo.full_name,
+            return two_branch_diff(gh, releasewatch.repo.full_name,
                                    releasewatch.release_branch, releasewatch.dev_branch, releasewatch.exclude_pattern)
         elif releasewatch.style == ReleaseWatch.TAG_PATTERN:
-            return tag_pattern_diff(gh, releasewatch.userrepo.repo.full_name,
+            return tag_pattern_diff(gh, releasewatch.repo.full_name,
                                     releasewatch.tag_pattern, releasewatch.dev_branch, releasewatch.exclude_pattern)
         else:
             raise ValueError("unknown release style: %s" % releasewatch.style)

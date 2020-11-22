@@ -1,22 +1,27 @@
 import logging
 
+from django.conf import settings
 from django.db import transaction
 from github import Github
 
 from repominder.apps.core.models import Repo, UserRepo
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
 
 def cache_repos(user):
     # should only be run as a result of a user logging in
-    social = user.social_auth.get(provider='github-app')
+    social = user.social_auth.get(provider="github-app")
 
     # user access token
-    gh = Github(social.extra_data['access_token'])
+    gh = Github(social.extra_data["access_token"])
     repos = gh.get_user().get_repos()
-    accessible_names = {r.full_name for r in repos}
+    accessible_names = [
+        r.full_name for r in repos if r.permissions.push or r.permissions.admin
+    ]
+    UserRepo.objects.filter(user=user).exclude(
+        repo__full_name__in=accessible_names
+    ).delete()
     for repo in Repo.objects.filter(full_name__in=accessible_names):
         repo.users.add(user)
 
@@ -37,16 +42,17 @@ def cache_repos(user):
 
 
 import logging
-import requests
 import time
 
-from django.db import transaction
 import jwt
+import requests
+from django.db import transaction
 from social_core.backends.github import GithubOAuth2
 
 from repominder.apps.core.models import Repo, UserRepo
 
 # APP_ACCEPT = 'application/vnd.github.machine-man-preview+json'
+
 
 def get_app_url(app_name):
     return "https://github.com/apps/%s" % app_name
@@ -56,17 +62,17 @@ def get_session():
     """Return a requests.Session for use with the apps api."""
 
     s = requests.Session()
-    s.headers.update({'Accept': 'application/vnd.github.v3+json'})
+    s.headers.update({"Accept": "application/vnd.github.v3+json"})
 
     return s
 
 
 def set_app_auth(session, app_token):
-    session.headers.update({'Authorization': "Bearer %s" % app_token})
+    session.headers.update({"Authorization": "Bearer %s" % app_token})
 
 
 def set_installation_auth(session, installation_token):
-    session.headers.update({'Authorization': "token %s" % installation_token})
+    session.headers.update({"Authorization": "token %s" % installation_token})
 
 
 def build_app_token(iss, key_contents, iat=None, exp=None):
@@ -86,14 +92,14 @@ def build_app_token(iss, key_contents, iat=None, exp=None):
         exp = iat + (10 * 60)
 
     payload = {
-        'iat': iat,
-        'exp': exp,
-        'iss': iss,
+        "iat": iat,
+        "exp": exp,
+        "iss": iss,
     }
     print(payload)
     print(repr(key_contents))
 
-    return jwt.encode(payload, key_contents, algorithm='RS256').decode('utf-8')
+    return jwt.encode(payload, key_contents, algorithm="RS256").decode("utf-8")
 
 
 def get_installation_token_details(installation_id, app_token):
@@ -105,8 +111,9 @@ def get_installation_token_details(installation_id, app_token):
 
     url = "https://api.github.com/app/installations/%s/access_tokens" % installation_id
     s = get_session()
-    r = s.post(url, headers={'Authorization': "Bearer %s" % app_token})
+    r = s.post(url, headers={"Authorization": "Bearer %s" % app_token})
     import pprint
+
     pprint.pprint(r.json())
     r.raise_for_status()
 
@@ -122,17 +129,20 @@ def get_installation_token(installation, app_id, pem_contents):
     set_app_auth(s, app_token)
     i_token_details = get_installation_token_details(installation_id, app_token)
 
-    return i_token_details['token']
+    return i_token_details["token"]
 
 
 def test(installation):
     # social = user.social_auth.get(provider='github-app')
 
     s = get_session()
-    token = get_installation_token(installation, settings.GH_APP_ID, settings.GH_APP_PEM)
+    token = get_installation_token(
+        installation, settings.GH_APP_ID, settings.GH_APP_PEM
+    )
     set_installation_auth(s, token)
     res = s.get("https://api.github.com/installation/repositories")
     import pprint
+
     pprint.pprint(res.json())
     res.raise_for_status()
     # current_names = {repo['full_name'] for repo in res.json()}
@@ -151,6 +161,7 @@ def test(installation):
     #     if new_links:
     #         logger.info("creating links: %r", new_links)
     #         UserRepo.objects.bulk_create(new_links)
+
 
 # def hook(data):
 # 	header_signature = request.headers.get('X-Hub-Signature')

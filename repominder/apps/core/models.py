@@ -16,8 +16,8 @@ class Installation(models.Model):
 
 class Repo(models.Model):
     full_name = models.CharField(max_length=256, db_index=True)
-    users = models.ManyToManyField(User, through='UserRepo')
-    installations = models.ManyToManyField(Installation, through='RepoInstall')
+    users = models.ManyToManyField(User, through="UserRepo")
+    installations = models.ManyToManyField(Installation, through="RepoInstall")
 
     def __str__(self):
         return "<Repo: %s>" % self.full_name
@@ -33,7 +33,11 @@ class RepoInstall(models.Model):
         unique_together = (("repo", "installation"),)
 
     def __str__(self):
-        return "<RepoInstall(%s): %s, %s>" % (self.id, self.repo.full_name, self.installation.installation_id)
+        return "<RepoInstall(%s): %s, %s>" % (
+            self.id,
+            self.repo.full_name,
+            self.installation.installation_id,
+        )
 
     __repr__ = __str__
 
@@ -46,7 +50,11 @@ class UserRepo(models.Model):
         unique_together = (("repo", "user"),)
 
     def __str__(self):
-        return "<UserRepo(%s): %s, %s>" % (self.id, self.user.username, self.repo.full_name)
+        return "<UserRepo(%s): %s, %s>" % (
+            self.id,
+            self.user.username,
+            self.repo.full_name,
+        )
 
     __repr__ = __str__
 
@@ -55,30 +63,33 @@ class ReleaseWatch(models.Model):
     repo = models.OneToOneField(Repo, on_delete=models.CASCADE)
     dev_branch = models.CharField(
         max_length=256,
-        verbose_name='development branch',
-        help_text='The branch that tracks the latest code (ie, where pull requests are merged to).',
+        verbose_name="development branch",
+        help_text="The branch that tracks the latest code (ie, where pull requests are merged to).",
     )
 
-    DUAL_BRANCH = 'DB'
+    DUAL_BRANCH = "DB"
     release_branch = models.CharField(
-        max_length=256, blank=True, default='',
-        help_text='The branch that tracks the most recent release.',
+        max_length=256,
+        blank=True,
+        default="",
+        help_text="The branch that tracks the most recent release.",
     )
 
-    TAG_PATTERN = 'TP'
+    TAG_PATTERN = "TP"
     tag_pattern = models.CharField(
-        max_length=256, blank=True,
-        default=r'*.*.*',
+        max_length=256,
+        blank=True,
+        default=r"*.*.*",
         help_text=(
-            'A shell pattern to match release tags.'
-            ' The default matches 3-part semver.'
+            "A shell pattern to match release tags."
+            " The default matches 3-part semver."
             ' <a href="https://docs.python.org/2/library/fnmatch.html">More details</a>.'
-        )
+        ),
     )
 
     CHOICES = (
-        (DUAL_BRANCH, 'dual branch'),
-        (TAG_PATTERN, 'tag pattern'),
+        (DUAL_BRANCH, "dual branch"),
+        (TAG_PATTERN, "tag pattern"),
     )
     style = models.CharField(
         max_length=2,
@@ -86,13 +97,14 @@ class ReleaseWatch(models.Model):
     )
 
     exclude_pattern = models.CharField(
-        max_length=256, blank=True,
-        default='[!*]',
+        max_length=256,
+        blank=True,
+        default="[!*]",
         help_text=(
             "A shell pattern to match commit messages that shouldn't count as a release."
-            ' The default matches nothing.'
+            " The default matches nothing."
             ' <a href="https://docs.python.org/2/library/fnmatch.html">More details</a>.'
-        )
+        ),
     )
 
     def __str__(self):

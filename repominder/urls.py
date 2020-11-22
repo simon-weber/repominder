@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^account/$', views.account, name='account'),
     url(r'^watch/(?P<id>\d+)/$', views.userrepo_details, name='userrepo'),
     url(r'^badge/(?P<selector>.+)/$', views.badge_info, name='badge_info',),
+    url(r'^hook/$', views.receive_hook, name='receive_hook',),
     # url(r'^privacy/$', PrivacyView.as_view(), name='privacy'),
     # url(r'^terms/$', TermsView.as_view(), name='terms'),
     url(r'^logout/$', views.logout, name='logout'),

@@ -11,6 +11,7 @@ from django.forms import modelform_factory
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
 
 from repominder.lib import ghapp, releases
 from .models import UserRepo, ReleaseWatch
@@ -105,3 +106,27 @@ def userrepo_details(request, id):
 def logout(request):
     auth_logout(request)
     return redirect('/')
+
+from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+import json
+
+
+@require_POST
+@csrf_exempt
+def receive_hook(request):
+    # TODO validate secret and IP, https://simpleisbetterthancomplex.com/tutorial/2016/10/31/how-to-handle-github-webhooks-using-django.html
+    event = request.META.get('HTTP_X_GITHUB_EVENT', 'ping')
+    data = json.loads(request.body)
+    import pprint
+    pprint.pprint(data)
+
+    if event == 'ping':
+        return HttpResponse('pong')
+    elif event == 'push':
+        # Do something...
+        return HttpResponse('success')
+
+    # In case we receive an event that's neither a ping or push
+    return HttpResponse(status=204)
+

@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def cache_repos(user):
+    # should only be run as a result of a user logging in
     social = user.social_auth.get(provider='github-app')
 
     # user access token
@@ -55,7 +56,7 @@ def get_session():
     """Return a requests.Session for use with the apps api."""
 
     s = requests.Session()
-#     s.headers.update({'Accept': APP_ACCEPT})
+    s.headers.update({'Accept': 'application/vnd.github.v3+json'})
 
     return s
 
@@ -89,8 +90,10 @@ def build_app_token(iss, key_contents, iat=None, exp=None):
         'exp': exp,
         'iss': iss,
     }
+    print(payload)
+    print(repr(key_contents))
 
-    return jwt.encode(payload, key_contents, algorithm='RS256')
+    return jwt.encode(payload, key_contents, algorithm='RS256').decode('utf-8')
 
 
 def get_installation_token_details(installation_id, app_token):
@@ -100,19 +103,21 @@ def get_installation_token_details(installation_id, app_token):
     https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/
     """
 
-    url = "https://api.github.com/installations/%s/access_tokens" % installation_id
+    url = "https://api.github.com/app/installations/%s/access_tokens" % installation_id
     s = get_session()
     r = s.post(url, headers={'Authorization': "Bearer %s" % app_token})
+    import pprint
+    pprint.pprint(r.json())
     r.raise_for_status()
 
     return r.json()
 
 
-def get_installation_token_from_user(user, app_id, pem_contents):
+def get_installation_token(installation, app_id, pem_contents):
     """Return an installation token by using an app token and stored installation id."""
 
     s = get_session()
-    installation_id = user.profile.installation_id
+    installation_id = installation.installation_id
     app_token = build_app_token(app_id, pem_contents)
     set_app_auth(s, app_token)
     i_token_details = get_installation_token_details(installation_id, app_token)
@@ -120,16 +125,16 @@ def get_installation_token_from_user(user, app_id, pem_contents):
     return i_token_details['token']
 
 
-def get_repos(user):
-    social = user.social_auth.get(provider='github-app')
+def test(installation):
+    # social = user.social_auth.get(provider='github-app')
 
     s = get_session()
-    token = get_installation_token_from_user(user, settings.GH_APP_ID, settings.GH_APP_PEM)
+    token = get_installation_token(installation, settings.GH_APP_ID, settings.GH_APP_PEM)
     set_installation_auth(s, token)
-    res = s.get("https://api.github.com/users/%s/repos" % social.extra_data['login'])
-    res.raise_for_status()
+    res = s.get("https://api.github.com/installation/repositories")
     import pprint
     pprint.pprint(res.json())
+    res.raise_for_status()
     # current_names = {repo['full_name'] for repo in res.json()}
 
     # # bulk create/update repos, then bulk create/update links for this user

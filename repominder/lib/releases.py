@@ -41,8 +41,7 @@ def get_badge_url(request, releasewatch):
 
 def encode_badge_selector(releasewatch):
     return base64.urlsafe_b64encode(json.dumps({
-        'user_id': releasewatch.userrepo.user.id,
-        'repo_id': releasewatch.userrepo.repo.id,
+        'full_name': releasewatch.repo.full_name,
     }).encode()).decode()
 
 

@@ -45,20 +45,20 @@
         </form>
     {% elif not watchform %}
         <p>
-            Select a release type for {{ userrepo.repo.full_name }}:
+            Select a release type for {{ repo.full_name }}:
         </p>
         <ul>
-            <li><a href="{% url 'userrepo' id=userrepo.id %}?style={{ ReleaseWatch.DUAL_BRANCH }}">dual branch</a>: PRs are merged to one branch, then that branch is merged to another when releasing.</li>
-            <li><a href="{% url 'userrepo' id=userrepo.id %}?style={{ ReleaseWatch.TAG_PATTERN }}">tag pattern</a>: a new annotated tag matching a pattern is created when releasing.</li>
+            <li><a href="{% url 'repo' id=repo.id %}?style={{ ReleaseWatch.DUAL_BRANCH }}">dual branch</a>: PRs are merged to one branch, then that branch is merged to another when releasing.</li>
+            <li><a href="{% url 'repo' id=repo.id %}?style={{ ReleaseWatch.TAG_PATTERN }}">tag pattern</a>: a new annotated tag matching a pattern is created when releasing.</li>
         </ul>
     {% endif %}
 </p>
 
 {% if watchform %}
     <p>
-        Configure {{ userrepo.repo.full_name }}:
+        Configure {{ repo.full_name }}:
     </p>
-    <form method="post" class="form-horizontal" action="{% url 'userrepo' id=userrepo.id %}">
+    <form method="post" class="form-horizontal" action="{% url 'repo' id=repo.id %}">
         {% csrf_token %}
         {% bootstrap_form watchform layout='horizontal'%}
 

@@ -52,7 +52,7 @@ class UserRepo(models.Model):
 
 
 class ReleaseWatch(models.Model):
-    userrepo = models.OneToOneField(UserRepo, on_delete=models.CASCADE)
+    repo = models.OneToOneField(Repo, on_delete=models.CASCADE)
     dev_branch = models.CharField(
         max_length=256,
         verbose_name='development branch',
@@ -96,6 +96,6 @@ class ReleaseWatch(models.Model):
     )
 
     def __str__(self):
-        return "<ReleaseWatch(%s): %s %s>" % (self.id, self.userrepo.repo.full_name, self.style)
+        return "<ReleaseWatch(%s): %s %s>" % (self.id, self.repo.full_name, self.style)
 
     __repr__ = __str__

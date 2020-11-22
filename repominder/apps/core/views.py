@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def badge_info(request, selector):
     data = releases.decode_badge_selector(str(selector))
-    releasewatch = ReleaseWatch.objects.get(userrepo__user=data['user_id'], userrepo__repo=data['repo_id'])
+    releasewatch = Repo.objects.get(full_name=data['full_name']).releasewatch
 
     diff = releases.ReleaseDiff.from_releasewatch(releasewatch)
 
@@ -37,21 +37,17 @@ def account(request):
     print('installs', list(Installation.objects.all()))
     print('repoinstalls', list(RepoInstall.objects.all()))
 
+    releasewatches = []
+    unwatched_repos = []
+    for userrepo in request.user.userrepo_set.all().order_by('repo__full_name').select_related('repo', 'repo__releasewatch'):
+        try:
+            releasewatches.append(userrepo.repo.releasewatch)
+        except ReleaseWatch.DoesNotExist:
+            unwatched_repos.append(userrepo.repo)
     c = {
-        'userrepos': request.user.userrepo_set.all().order_by('repo__full_name')
+        'repos': unwatched_repos,
+        'releasewatches': releasewatches,
     }
-
-    # unwatched_userrepos = []
-    # releasewatches = []
-    # for userrepo in request.user.userrepo_set.all().order_by('repo__full_name'):
-    #     try:
-    #         releasewatches.append(userrepo.releasewatch)
-    #     except ReleaseWatch.DoesNotExist:
-    #         unwatched_userrepos.append(userrepo)
-    # c = {
-    #     'userrepos': unwatched_userrepos,
-    #     'releasewatches': releasewatches,
-    # }
 
     return render(request, 'logged_in.html', c)
 
@@ -61,20 +57,20 @@ def landing(request):
 
 
 @login_required(login_url='/')
-def userrepo_details(request, id):
-    userrepo = UserRepo.objects.get(user=request.user, id=id)
+def repo_details(request, id):
+    repo = Repo.objects.get(users__in=[request.user], id=id)
     try:
-        releasewatch = userrepo.releasewatch
+        releasewatch = repo.releasewatch
         style = releasewatch.style
     except ReleaseWatch.DoesNotExist:
         releasewatch = None
         # This can be in the querystring (from the style list) or form (from the hidden field).
         style = request.GET.get('style') or request.POST.get('style')
 
-    c = {'userrepo': userrepo, 'ReleaseWatch': ReleaseWatch}
+    c = {'repo': repo, 'ReleaseWatch': ReleaseWatch}
     if not style:
         # Show the style list.
-        return render(request, 'userrepo.html', c)
+        return render(request, 'repo.html', c)
 
     fields = ['dev_branch', 'style']
     if style == ReleaseWatch.DUAL_BRANCH:
@@ -95,7 +91,7 @@ def userrepo_details(request, id):
         c['watchform'] = form
         c['badge_url'] = releases.get_badge_url(request, releasewatch)
         c.update(csrf(request))
-        return render(request, 'userrepo.html', c)
+        return render(request, 'repo.html', c)
 
     if request.method == 'POST' and 'delete' in request.POST:
         logger.info("deleting %s", releasewatch)
@@ -104,7 +100,7 @@ def userrepo_details(request, id):
         form = WatchForm(request.POST, instance=releasewatch)
         if form.is_valid():
             releasewatch = form.save(commit=False)
-            releasewatch.userrepo = userrepo
+            releasewatch.repo = repo
             releasewatch.save()
 
     return redirect(account)

@@ -1,0 +1,32 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: check-merge-conflict
+  - id: check-yaml
+  - id: debug-statements
+
+- repo: local
+  hooks:
+  - id: black
+    name: Black
+    language: system
+    entry: black
+    require_serial: true
+    types: [python]
+
+  - id: flake8
+    name: Flake8
+    entry: flake8
+    language: python
+    types: [python]
+    require_serial: true
+
+  - id: isort
+    name: isort
+    entry: isort
+    language: python
+    types: [python]
+    args: []
+    require_serial: false
+    additional_dependencies: []

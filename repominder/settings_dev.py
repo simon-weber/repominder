@@ -20,6 +20,9 @@ DATABASES = {
     }
 }
 
+GH_APP_ID = 6687
+GH_APP_PEM = get_secret('ghapp_privkey-dev.pem')
+
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 SOCIAL_AUTH_GITHUB_APP_KEY = 'Iv1.8673e1a33dca52e9'
 SOCIAL_AUTH_GITHUB_APP_SECRET = get_secret('ghapp_client_secret-dev.txt')

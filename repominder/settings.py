@@ -215,6 +215,9 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = '/account/'
 
+GH_APP_ID = 6645
+GH_APP_PEM = get_secret('ghapp_privkey.pem')
+
 # python-social-auth
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubAppAuth',
@@ -222,10 +225,11 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
-SOCIAL_AUTH_GITHUB_KEY = '26c2b5da7746008ddc28'
-SOCIAL_AUTH_GITHUB_SECRET = get_secret('github_oauth_client_secret.txt')
+SOCIAL_AUTH_GITHUB_APP_KEY = 'Iv1.8f8d24ae1cde5829'
+SOCIAL_AUTH_GITHUB_APP_SECRET = get_secret('ghapp_client_secret.txt')
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['installation_id']
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',

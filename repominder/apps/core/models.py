@@ -5,12 +5,35 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Installation(models.Model):
+    installation_id = models.PositiveIntegerField(db_index=True)
+
+    def __str__(self):
+        return "<Installation: %s>" % self.installation_id
+
+    __repr__ = __str__
+
+
 class Repo(models.Model):
-    full_name = models.CharField(max_length=256)
+    full_name = models.CharField(max_length=256, db_index=True)
     users = models.ManyToManyField(User, through='UserRepo')
+    installations = models.ManyToManyField(Installation, through='RepoInstall')
 
     def __str__(self):
         return "<Repo: %s>" % self.full_name
+
+    __repr__ = __str__
+
+
+class RepoInstall(models.Model):
+    repo = models.ForeignKey(Repo, on_delete=models.CASCADE)
+    installation = models.ForeignKey(Installation, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("repo", "installation"),)
+
+    def __str__(self):
+        return "<RepoInstall(%s): %s, %s>" % (self.id, self.repo.full_name, self.installation.installation_id)
 
     __repr__ = __str__
 

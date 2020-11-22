@@ -14,13 +14,20 @@ logger = logging.getLogger(__name__)
 @partial
 def cache_github_details(strategy, backend, request, details, *args, **kwargs):
     from repominder.lib import ghapp
+    pass
 
-    user = kwargs['user']
-    # obj, created = Profile.objects.update_or_create(
-    #     user=user, defaults={'installation_id': installation_id}
-    # )
-
-    ghapp.cache_repos(user)
+    # install_id = request.GET.get('installation_id')
+    # if install_id:
+    #     # coming from new/updated installation
+    #     pass
+    #     print("install id", install_id)
+    #     obj, created = Installation.objects.update_or_create(
+    #         user=user, defaults={'installation_id': installation_id}
+    #     )
+    # else:
+    #     # coming from website login
+    #     user = kwargs['user']
+    #     ghapp.cache_repos(user)
 
 
 @partial

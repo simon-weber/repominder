@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
 import logging
 
 from django import forms
@@ -8,14 +9,15 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousOperation
 from django.forms import modelform_factory
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from repominder.lib import ghapp, releases
 
-from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserRepo
+from .models import Installation, ReleaseWatch, Repo, RepoInstall
 
 logger = logging.getLogger(__name__)
 
@@ -115,12 +117,6 @@ def repo_details(request, id):
 def logout(request):
     auth_logout(request)
     return redirect("/")
-
-
-import json
-
-from django.http import HttpResponse
-from django.views.decorators.http import require_POST
 
 
 @require_POST

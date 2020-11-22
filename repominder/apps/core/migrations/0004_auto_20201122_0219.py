@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20201122_0157'),
+        ("core", "0003_auto_20201122_0157"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='installation',
-            name='installation_id',
+            model_name="installation",
+            name="installation_id",
             field=models.PositiveIntegerField(db_index=True),
         ),
         migrations.AlterField(
-            model_name='repo',
-            name='full_name',
+            model_name="repo",
+            name="full_name",
             field=models.CharField(db_index=True, max_length=256),
         ),
     ]

@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.dispatch.dispatcher import receiver
-from django_amazon_ses import pre_send, post_send
+from django_amazon_ses import post_send, pre_send
 
 logger = logging.getLogger(__name__)
 
@@ -21,5 +21,6 @@ def log_message(sender, message=None, message_id=None, **kwargs):
     if message and message_id:
         logger.info("sent email to %r: id %s", message.to, message_id)
     else:
-        logger.warning("post_send didn't include message info: %r, %r",
-                       message, message_id)
+        logger.warning(
+            "post_send didn't include message info: %r, %r", message, message_id
+        )

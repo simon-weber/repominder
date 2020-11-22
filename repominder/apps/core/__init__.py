@@ -1,10 +1,10 @@
 import logging
 
-from django.conf import settings
 import requests
+from django.conf import settings
 from social_core.pipeline.partial import partial
 
-default_app_config = 'repominder.apps.core.apps.CoreConfig'
+default_app_config = "repominder.apps.core.apps.CoreConfig"
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 @partial
 def cache_github_details(strategy, backend, request, details, *args, **kwargs):
-    from repominder.lib import ghapp
     pass
 
     # install_id = request.GET.get('installation_id')
@@ -34,7 +33,7 @@ def cache_github_details(strategy, backend, request, details, *args, **kwargs):
 def subscribe_to_list(strategy, backend, request, details, *args, **kwargs):
     from repominder.lib import mailchimp
 
-    user = kwargs['user']
+    user = kwargs["user"]
 
     if user.last_login is not None:
         # Only add during the very first login.
@@ -47,5 +46,5 @@ def subscribe_to_list(strategy, backend, request, details, *args, **kwargs):
     try:
         mailchimp.add_to_list(user.email, settings.MAILCHIMP_LIST_ID)
     except requests.exceptions.HTTPError as err:
-        if 'already a list member' not in err.response.text:
+        if "already a list member" not in err.response.text:
             logger.exception("did not add (or readd) to mailchimp: %s", user.email)

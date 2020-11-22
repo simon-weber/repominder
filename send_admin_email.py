@@ -4,6 +4,7 @@ Intended for use from the shell (eg to alert on failed crontasks).
 """
 
 import django
+
 django.setup()
 
 import logging
@@ -11,9 +12,9 @@ import sys
 
 from django.core.mail import mail_admins
 
-logger = logging.getLogger('repominder.send_admin_email')
+logger = logging.getLogger("repominder.send_admin_email")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         subject = sys.argv[1]
         body = sys.argv[2]

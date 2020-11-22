@@ -1,7 +1,9 @@
 import logging
+import time
 
+import jwt
+import requests
 from django.conf import settings
-from django.db import transaction
 from github import Github
 
 from repominder.apps.core.models import Repo, UserRepo
@@ -40,16 +42,6 @@ def cache_repos(user):
     #         logger.info("creating links: %r", new_links)
     #         UserRepo.objects.bulk_create(new_links)
 
-
-import logging
-import time
-
-import jwt
-import requests
-from django.db import transaction
-from social_core.backends.github import GithubOAuth2
-
-from repominder.apps.core.models import Repo, UserRepo
 
 # APP_ACCEPT = 'application/vnd.github.machine-man-preview+json'
 

@@ -1,15 +1,16 @@
 import django
+
 django.setup()
 
-from collections import defaultdict
 import logging
+from collections import defaultdict
 
 from django.core.mail import EmailMessage
 
 from repominder.apps.core.models import ReleaseWatch
 from repominder.lib.releases import ReleaseDiff
 
-logger = logging.getLogger('repominder.send_notifications')
+logger = logging.getLogger("repominder.send_notifications")
 
 
 def send_email(user, diffs):
@@ -20,32 +21,34 @@ def send_email(user, diffs):
     if not with_changes:
         return
 
-    lines = ['Repominder noticed unreleased changes on the following projects:']
+    lines = ["Repominder noticed unreleased changes on the following projects:"]
     for diff in with_changes:
         lines.append("  * %s: %s" % (diff.repo_name, diff.compare_url))
 
     if without_changes:
-        lines.append('\n')
-        lines.append('The following projects are up to date:')
+        lines.append("\n")
+        lines.append("The following projects are up to date:")
         for diff in without_changes:
             lines.append("  * %s" % diff.repo_name)
 
-    lines.append('\n')
-    lines.append('To configure your reminders, log in at https://www.repominder.com')
-    lines.append('\n')
-    lines.append('Appreciate Repominder? Consider sponsoring development! https://github.com/sponsors/simon-weber')
+    lines.append("\n")
+    lines.append("To configure your reminders, log in at https://www.repominder.com")
+    lines.append("\n")
+    lines.append(
+        "Appreciate Repominder? Consider sponsoring development! https://github.com/sponsors/simon-weber"
+    )
 
     email = EmailMessage(
         subject="unreleased changes detected",
         to=[user.email],
-        body='\n'.join(lines),
+        body="\n".join(lines),
     )
     email.send(fail_silently=False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
-        logger.info('running')
+        logger.info("running")
         user_diffs = defaultdict(list)  # user: [ReleaseDiff]
 
         for releasewatch in ReleaseWatch.objects.all():
@@ -64,6 +67,6 @@ if __name__ == '__main__':
             except:
                 logger.exception("failed to send email for %s", releasewatch)
 
-        logger.info('done')
+        logger.info("done")
     except:
         logger.exception("failed to send notifications")

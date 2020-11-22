@@ -5,7 +5,6 @@ django-bootstrap3
 djmail
 gevent
 gunicorn
-mailchimp3
 newrelic
 raven
 requests

@@ -235,7 +235,6 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.associate_user",
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
-    "repominder.apps.core.subscribe_to_list",
     "repominder.apps.core.cache_github_details",
 )
 
@@ -250,7 +249,3 @@ BOOTSTRAP3 = {
     "horizontal_label_class": "col-md-3",
     "horizontal_field_class": "col-md-9",
 }
-
-MAILCHIMP_API_KEY = get_secret("mailchimp_api.key")
-MAILCHIMP_API_USER = get_secret("mailchimp_api.user")
-MAILCHIMP_LIST_ID = "b3a7b4d47f"

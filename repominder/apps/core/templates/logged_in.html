@@ -2,23 +2,36 @@
 {% load bootstrap3 %}
 
 {% block content %}
-{% if releasewatches %}
-    TODO You will receive an email on Sundays to {{ user.email }} if a watched repo has unreleased changes.
-    <br/>
-    <br/>
-    Choose a watched repo to edit or unwatch:
+{% if watched_repos %}
+<h3>Monitored Repos</h3>
+These repos are being monitored by Repominder.
+<br/>
+You'll receive an email to {{ user.email }} on Sundays if these have unreleased changes:
     <ul>
-    {% for releasewatch in releasewatches %}
-        <li><a href="{% url 'repo' id=releasewatch.repo.id %}">{{ releasewatch.repo.full_name }}</a></li> 
+    {% for repo in watched_repos %}
+        <li><a href="{% url 'repo' id=repo.id %}">{{ repo.full_name }}</a></li> 
     {% endfor %}
     </ul>
 {% endif %}
 
-Choose a repo to watch:
-<ul>
-{% for repo in repos %}
-    <li><a href="{% url 'repo' id=repo.id %}">{{ repo.full_name }}</a></li> 
-{% endfor %}
-</ul>
+{% if configured_repos %}
+<h3>Configured Repos</h3>
+These repos have been configured with Repominder, but you will not receive emails about them:
+    <ul>
+    {% for repo in configured_repos %}
+        <li><a href="{% url 'repo' id=repo.id %}">{{ repo.full_name }}</a></li> 
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if unconfigured_repos %}
+<h3>Unconfigured Repos</h3>
+Repominder has access to these repos, but they have not yet been configured with a release type:
+    <ul>
+    {% for repo in unconfigured_repos %}
+        <li><a href="{% url 'repo' id=repo.id %}">{{ repo.full_name }}</a></li> 
+    {% endfor %}
+    </ul>
+{% endif %}
 
 {% endblock content %}

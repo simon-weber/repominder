@@ -5,10 +5,7 @@
 
 <p>
     {% if releasewatch %}
-        <p>
-            This repo is watched.
-        </p>
-
+    <h3>Release Badge</h3>
         <p>
             Your badge looks like:
             <br/>
@@ -55,9 +52,7 @@
 </p>
 
 {% if watchform %}
-    <p>
-        Configure {{ repo.full_name }}:
-    </p>
+    <h3>Release Configuration</h3>
     <form method="post" class="form-horizontal" action="{% url 'repo' id=repo.id %}">
         {% csrf_token %}
         {% bootstrap_form watchform layout='horizontal'%}
@@ -68,7 +63,7 @@
                 <button class="btn btn-primary" type="submit" name="submit">update</button>
                 {% if releasewatch %}
                     &nbsp;
-                    <button class="btn btn-default" type="submit" name="delete">unwatch</button>
+                    <button class="btn btn-danger" type="submit" name="delete">deconfigure</button>
                 {% endif %}
             </div>
         </div>

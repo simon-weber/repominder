@@ -47,7 +47,7 @@ class UserRepo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     enable_digest = models.BooleanField(
         default=False,
-        help_text="Enable to include this repo in a weekly email of all repos pending release.",
+        help_text="Enable to include this repo in your weekly email.",
     )
 
     class Meta:

@@ -40,20 +40,24 @@ def account(request):
     print("installs", list(Installation.objects.all()))
     print("repoinstalls", list(RepoInstall.objects.all()))
 
-    releasewatches = []
-    unwatched_repos = []
+    configured_repos = []
+    watched_repos = []
+    unconfigured_repos = []
     for userrepo in (
         request.user.userrepo_set.all()
         .order_by("repo__full_name")
         .select_related("repo", "repo__releasewatch")
     ):
-        try:
-            releasewatches.append(userrepo.repo.releasewatch)
-        except ReleaseWatch.DoesNotExist:
-            unwatched_repos.append(userrepo.repo)
+        if userrepo.enable_digest and hasattr(userrepo.repo, "releasewatch"):
+            watched_repos.append(userrepo.repo)
+        elif not userrepo.enable_digest and hasattr(userrepo.repo, "releasewatch"):
+            configured_repos.append(userrepo.repo)
+        else:
+            unconfigured_repos.append(userrepo.repo)
     c = {
-        "repos": unwatched_repos,
-        "releasewatches": releasewatches,
+        "configured_repos": configured_repos,
+        "watched_repos": watched_repos,
+        "unconfigured_repos": unconfigured_repos,
     }
 
     return render(request, "logged_in.html", c)
@@ -95,7 +99,7 @@ def repo_details(request, id):
     WatchForm.base_fields["enable_digest"] = forms.BooleanField(
         initial=userrepo.enable_digest,
         required=False,
-        label="Email notification",
+        label="Email notifications",
         help_text=UserRepo._meta.get_field("enable_digest").help_text,
     )
 

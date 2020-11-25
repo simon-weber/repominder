@@ -88,8 +88,6 @@ def build_app_token(iss, key_contents, iat=None, exp=None):
         "exp": exp,
         "iss": iss,
     }
-    print(payload)
-    print(repr(key_contents))
 
     return jwt.encode(payload, key_contents, algorithm="RS256").decode("utf-8")
 
@@ -104,9 +102,7 @@ def get_installation_token_details(installation_id, app_token):
     url = "https://api.github.com/app/installations/%s/access_tokens" % installation_id
     s = get_session()
     r = s.post(url, headers={"Authorization": "Bearer %s" % app_token})
-    import pprint
 
-    pprint.pprint(r.json())
     r.raise_for_status()
 
     return r.json()
@@ -133,9 +129,7 @@ def test(installation):
     )
     set_installation_auth(s, token)
     res = s.get("https://api.github.com/installation/repositories")
-    import pprint
 
-    pprint.pprint(res.json())
     res.raise_for_status()
     # current_names = {repo['full_name'] for repo in res.json()}
 

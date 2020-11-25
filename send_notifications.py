@@ -1,14 +1,14 @@
+import logging
+from collections import defaultdict
+
 import django
 
 django.setup()
 
-import logging
-from collections import defaultdict
+from django.core.mail import EmailMessage  # noqa: E402
 
-from django.core.mail import EmailMessage
-
-from repominder.apps.core.models import ReleaseWatch
-from repominder.lib.releases import ReleaseDiff
+from repominder.apps.core.models import UserRepo  # noqa: E402
+from repominder.lib.releases import ReleaseDiff  # noqa: E402
 
 logger = logging.getLogger("repominder.send_notifications")
 
@@ -51,13 +51,14 @@ if __name__ == "__main__":
         logger.info("running")
         user_diffs = defaultdict(list)  # user: [ReleaseDiff]
 
-        for releasewatch in ReleaseWatch.objects.all():
+        for userrepo in UserRepo.objects.filter(enable_digest=True):
+            releasewatch = userrepo.repo.releasewatch
             try:
                 logger.info("checking: %s", releasewatch)
                 diff = ReleaseDiff.from_releasewatch(releasewatch)
 
                 logger.info("diff: %s", diff)
-                user_diffs[releasewatch.userrepo.user].append(diff)
+                user_diffs[userrepo.user].append(diff)
             except:
                 logger.exception("failed to check diff for %s", releasewatch)
 

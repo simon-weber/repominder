@@ -17,7 +17,7 @@ from django.views.decorators.http import require_POST
 
 from repominder.lib import ghapp, releases
 
-from .models import Installation, ReleaseWatch, Repo, RepoInstall
+from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserRepo
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,15 @@ def repo_details(request, id):
         raise SuspiciousOperation("unrecognized style")
     fields.append("exclude_pattern")
 
+    # TODO probably should use a formset
+    userrepo = UserRepo.objects.get(user=request.user, repo=repo)
     WatchForm = modelform_factory(ReleaseWatch, fields=fields)
+    WatchForm.base_fields["enable_digest"] = forms.BooleanField(
+        initial=userrepo.enable_digest,
+        required=False,
+        label="Email notification",
+        help_text=UserRepo._meta.get_field("enable_digest").help_text,
+    )
 
     if request.method == "GET":
         form = WatchForm(instance=releasewatch, initial={"style": style})
@@ -104,12 +112,21 @@ def repo_details(request, id):
     if request.method == "POST" and "delete" in request.POST:
         logger.info("deleting %s", releasewatch)
         releasewatch.delete()
+        userrepo.enable_digest = False
+        userrepo.save()
     elif request.method == "POST":
-        form = WatchForm(request.POST, instance=releasewatch)
+        post_data = request.POST.copy()
+        enable_digest = post_data.pop("enable_digest", None)
+        form = WatchForm(post_data, instance=releasewatch)
         if form.is_valid():
             releasewatch = form.save(commit=False)
             releasewatch.repo = repo
             releasewatch.save()
+            userrepo.enable_digest = enable_digest == ["on"]
+            userrepo.save()
+        else:
+            # TODO render errors
+            pass
 
     return redirect(account)
 

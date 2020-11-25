@@ -45,6 +45,10 @@ class RepoInstall(models.Model):
 class UserRepo(models.Model):
     repo = models.ForeignKey(Repo, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    enable_digest = models.BooleanField(
+        default=False,
+        help_text="Enable to include this repo in a weekly email of all repos pending release.",
+    )
 
     class Meta:
         unique_together = (("repo", "user"),)

@@ -13,7 +13,8 @@
         Get notified if you've forgotten to cut a release for a GitHub project.
         </p>
 
-        <a class="btn btn-primary btn-lg active" href="{% url 'social:begin' 'github-app' %}">Log in with GitHub</a>
+        <a class="btn btn-primary btn-lg active" href="https://github.com/apps/{{ GH_APP_NAME }}/installations/new">Install on GitHub</a>
+        <a class="btn btn-default btn-lg active" href="{% url 'social:begin' 'github-app' %}">Log in with GitHub</a>
     </div>
 </div>
 <div class="container landing text-center">

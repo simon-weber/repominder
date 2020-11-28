@@ -5,6 +5,7 @@ import json
 import logging
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousOperation
@@ -55,16 +56,18 @@ def account(request):
         else:
             unconfigured_repos.append(userrepo.repo)
     c = {
+        "GH_APP_NAME": settings.GH_APP_NAME,
         "configured_repos": configured_repos,
         "watched_repos": watched_repos,
         "unconfigured_repos": unconfigured_repos,
+        "no_repos": not any([configured_repos, watched_repos, unconfigured_repos]),
     }
 
     return render(request, "logged_in.html", c)
 
 
 def landing(request):
-    return render(request, "logged_out.html")
+    return render(request, "logged_out.html", {"GH_APP_NAME": settings.GH_APP_NAME})
 
 
 @login_required(login_url="/")

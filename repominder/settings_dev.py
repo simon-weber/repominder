@@ -1,4 +1,5 @@
 from .settings import *  # noqa
+from .settings import BASE_DIR, RAVEN_CONFIG, get_secret, os
 
 DEBUG = True
 SECRET_KEY = "dev_secret_key"
@@ -20,6 +21,7 @@ DATABASES = {
     }
 }
 
+GH_APP_NAME = "repominder-dev"
 GH_APP_ID = 6687
 GH_APP_PEM = get_secret("ghapp_privkey-dev.pem")
 

@@ -211,6 +211,7 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = "/account/"
 
+GH_APP_NAME = "repominder"
 GH_APP_ID = 6645
 GH_APP_PEM = get_secret("ghapp_privkey.pem")
 

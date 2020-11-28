@@ -34,4 +34,23 @@ Repominder has access to these repos, but they have not yet been configured with
     </ul>
 {% endif %}
 
+{% if no_repos %}
+<p>
+It doesn't look like Repominder has access to any of your repos.
+</p>
+<p>
+Make sure you've <a href="https://github.com/apps/{{ GH_APP_NAME }}/installations/new">installed the app on GitHub</a>.
+If you already did, get help with one of the contact methods below.
+</p>
+{% endif %}
 {% endblock content %}
+
+{% block footer %}
+{% if not no_repos %}
+<div class="text-right text-muted" style="padding-top: 2em;">
+<h4>Don't see the repo you're looking for?</h4>
+Check that you <a href="https://github.com/apps/{{ GH_APP_NAME }}/installations/new">installed the app on GitHub</a> and have write access to the repo.
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock footer %}

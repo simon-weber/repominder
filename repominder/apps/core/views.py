@@ -9,6 +9,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import SuspiciousOperation
 from django.forms import modelform_factory
 from django.http import HttpResponse, JsonResponse
@@ -23,7 +24,7 @@ from django.views.generic import TemplateView
 
 from repominder.lib import ghapp, releases
 
-from .models import Installation, Profile, ReleaseWatch, Repo, RepoInstall, UserRepo
+from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserInstall, UserRepo
 
 logger = logging.getLogger(__name__)
 
@@ -37,25 +38,27 @@ def badge_info(request, selector):
     return JsonResponse({"status": "stale" if diff.has_changes else "fresh"})
 
 
-@login_required()
+@login_required(login_url="/")
 def account(request):
-    profile, _ = Profile.objects.get_or_create(user=request.user)
-
     if request.GET.get("refresh"):
         logger.info("refresh requested")
+        for installation in request.user.installation_set.all():
+            ghapp.cache_install(installation)
         ghapp.cache_repos(request.user)
         # pop the querystring
         return redirect(account)
-    elif profile.last_userrepo_refresh < timezone.now() - timedelta(days=1):
+    elif request.user.profile.last_userrepo_refresh < timezone.now() - timedelta(
+        days=1
+    ):
         logger.info(
             "last refresh at %s; refreshing", request.user.profile.last_userrepo_refresh
         )
         ghapp.cache_repos(request.user)
-        return redirect(account)
 
     print("repos", list(Repo.objects.all()))
     print("installs", list(Installation.objects.all()))
     print("repoinstalls", list(RepoInstall.objects.all()))
+    print("userinstalls", list(UserInstall.objects.all()))
 
     configured_repos = []
     watched_repos = []
@@ -192,20 +195,25 @@ def receive_hook(request):
     print("repoinstalls", list(RepoInstall.objects.all()))
 
     # TODO
-    # install/uninstall: update install id + repos
-    # repo add/remove: update repos
     if event == "ping":
         return HttpResponse("pong")
     elif event == "installation":
-        # sync repos + install state
+        # install/uninstall: update install id + repos
         # TODO can probably transaction + bulk this like userrepos
         action = data["action"]
         installation_id = data["installation"]["id"]
         repo_details = data["repositories"]
+        sender_login = data["sender"]["login"]
         if action == "created":
             installation, created = Installation.objects.get_or_create(
                 installation_id=installation_id
             )
+            try:
+                user = User.objects.get(username=sender_login)
+                installation.users.add(user)
+            except User.DoesNotExist:
+                # hook received before user logged in
+                pass
             for detail in repo_details:
                 print("handle", detail)
                 repo, created = Repo.objects.get_or_create(
@@ -222,9 +230,9 @@ def receive_hook(request):
                 action,
                 installation_id,
             )
-            return HttpResponse(status=204)
 
     elif event == "installation_repositories":
+        # repo add/remove: update repos
         action = data["action"]
         installation_id = data["installation"]["id"]
         if action == "removed":
@@ -244,10 +252,6 @@ def receive_hook(request):
                     full_name=detail["full_name"]
                 )
                 repo.installations.add(installation)
-
-    elif event == "push":
-        # push: update releasewatch if config changed
-        return HttpResponse("success")
 
     print("post hook")
     print("repos", list(Repo.objects.all()))

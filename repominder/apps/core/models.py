@@ -18,6 +18,7 @@ class Profile(models.Model):
 
 class Installation(models.Model):
     installation_id = models.PositiveIntegerField(db_index=True)
+    users = models.ManyToManyField(User, through="UserInstall")
 
     def __str__(self):
         return "<Installation: %s>" % self.installation_id
@@ -32,6 +33,23 @@ class Repo(models.Model):
 
     def __str__(self):
         return "<Repo: %s>" % self.full_name
+
+    __repr__ = __str__
+
+
+class UserInstall(models.Model):
+    installation = models.ForeignKey(Installation, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("installation", "user"),)
+
+    def __str__(self):
+        return "<UserInstall(%s): %s, %s>" % (
+            self.id,
+            self.user.username,
+            self.installation.installation_id,
+        )
 
     __repr__ = __str__
 

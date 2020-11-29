@@ -7,7 +7,7 @@
 <div class="jumbotron">
     <div class="container text-center landing">
         <h1>Repominder</h1>
-        <h2>Release reminders for open source maintainers</h2>
+        <h2>Free release reminders for open source maintainers</h2>
         <br/>
         <a class="btn btn-primary btn-lg active" href="https://github.com/apps/{{ GH_APP_NAME }}/installations/new">Install on GitHub</a>
         <a class="btn btn-default btn-lg active" style="margin-left: 1em;" href="{% url 'social:begin' 'github-app' %}">Log in</a>
@@ -36,21 +36,21 @@
         <div style="padding: 1em">
           <h3>1: Install the GitHub App</h3>
           <p>
-          Repominder is a GitHub App, which means you can give it access to specific repos that you manage.
-          All kinds of repos are supported, including organization-owned and private repos.
+          You can give Repominder access to all your repos or just a few.
+          Organization-owned and private repos are also supported.
           </p>
         </div>
         <div style="padding: 1em">
           <h3>2: Configure release style</h3>
           <p>
-          You need to describe to Repominder how your project represents releases in git.
+          You describe to Repominder how your project represents releases in git.
           Both dual-branch - for example, a master and release branch - and tag-based styles are supported.
           </p>
         </div>
         <div style="padding: 1em">
           <h3>3: Get notified</h3>
           <p>
-          You'll receive an email on Sundays if any of your configured repos have changes pending release.
+          You'll receive an email on Sundays if your repos have changes pending release.
           You also get access to readme badges that show your release status:
           <img src="https://img.shields.io/badge/release-fresh-blue" type="image/svg+xml"></src>
           or 

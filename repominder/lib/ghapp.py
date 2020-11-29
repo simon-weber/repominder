@@ -12,7 +12,19 @@ from repominder.apps.core.models import Repo, UserRepo
 logger = logging.getLogger(__name__)
 
 
+def cache_install(installation):
+    # sync installation/repo access state
+    # should be kept up to date with hooks, but may need to be run manually if a hook is dropped
+    res = get_installation_repos(installation)
+
+    for detail in res.json()["repositories"]:
+        repo, created = Repo.objects.get_or_create(full_name=detail["full_name"])
+        repo.installations.add(installation)
+
+
 def cache_repos(user):
+    # sync user/repo access state
+    # not kept up to date with hooks, needs to be run periodically
     # should only be run as a result of a user logging in (ie, not from a cron or script)
     social = user.social_auth.get(provider="github-app")
 
@@ -106,9 +118,7 @@ def get_installation_token(installation, app_id, pem_contents):
     return i_token_details["token"]
 
 
-def test(installation):
-    # social = user.social_auth.get(provider='github-app')
-
+def get_installation_repos(installation):
     s = get_session()
     token = get_installation_token(
         installation, settings.GH_APP_ID, settings.GH_APP_PEM
@@ -117,6 +127,8 @@ def test(installation):
     res = s.get("https://api.github.com/installation/repositories")
 
     res.raise_for_status()
+
+    return res
     # current_names = {repo['full_name'] for repo in res.json()}
 
     # # bulk create/update repos, then bulk create/update links for this user

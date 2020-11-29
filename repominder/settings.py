@@ -195,7 +195,7 @@ LOGGING = {
         },
         "github": {
             "handlers": ["console_simple"],
-            "level": "INFO",  # TODO DEBUG has full requests -- get just method/url
+            "level": "INFO",
         },
         "repominder": {
             "handlers": ["console_verbose"],
@@ -214,6 +214,7 @@ LOGIN_REDIRECT_URL = "/account/"
 GH_APP_NAME = "repominder"
 GH_APP_ID = 6645
 GH_APP_PEM = get_secret("ghapp_privkey.pem")
+GH_APP_WEBHOOK_SECRET = get_secret("ghapp_webhook_secret.txt")
 
 # python-social-auth
 AUTHENTICATION_BACKENDS = (

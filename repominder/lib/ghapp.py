@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 from github import Github
 
-from repominder.apps.core.models import Repo, UserRepo
+from repominder.apps.core.models import Repo, RepoInstall, UserRepo
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +17,15 @@ def cache_install(installation):
     # should be kept up to date with hooks, but may need to be run manually if a hook is dropped
     res = get_installation_repos(installation)
 
+    RepoInstall.objects.filter(installation=installation).delete()
     for detail in res.json()["repositories"]:
         repo, created = Repo.objects.get_or_create(full_name=detail["full_name"])
         repo.installations.add(installation)
+
+    to_delete = Repo.objects.filter(installations__isnull=True)
+    if to_delete:
+        print("deleting", to_delete)
+        to_delete.delete()
 
 
 def cache_repos(user):

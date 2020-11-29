@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import hmac
 import json
 import logging
 from datetime import timedelta
+from hashlib import sha1
 
 from django import forms
 from django.conf import settings
@@ -12,11 +14,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import SuspiciousOperation
 from django.forms import modelform_factory
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.http import (
+    HttpResponse,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+    JsonResponse,
+)
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.context_processors import csrf
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -108,8 +116,7 @@ class PrivacyView(CachedView):
 
 @login_required(login_url="/")
 def repo_details(request, id):
-    # TODO 404
-    repo = Repo.objects.get(users__in=[request.user], id=id)
+    repo = get_object_or_404(Repo, users__in=[request.user], id=id)
     try:
         releasewatch = repo.releasewatch
         style = releasewatch.style
@@ -182,7 +189,20 @@ def logout(request):
 @require_POST
 @csrf_exempt
 def receive_hook(request):
-    # TODO validate secret and IP, https://simpleisbetterthancomplex.com/tutorial/2016/10/31/how-to-handle-github-webhooks-using-django.html
+    header_signature = request.META.get("HTTP_X_HUB_SIGNATURE")
+    if header_signature is None:
+        return HttpResponseForbidden("Permission denied.")
+    sha_name, signature = header_signature.split("=")
+    if sha_name != "sha1":
+        return HttpResponseServerError("Operation not supported.", status=501)
+    mac = hmac.new(
+        force_bytes(settings.GH_APP_WEBHOOK_SECRET),
+        msg=force_bytes(request.body),
+        digestmod=sha1,
+    )
+    if not hmac.compare_digest(force_bytes(mac.hexdigest()), force_bytes(signature)):
+        return HttpResponseForbidden("Permission denied.")
+
     event = request.META.get("HTTP_X_GITHUB_EVENT", "ping")
     data = json.loads(request.body)
     import pprint
@@ -194,7 +214,6 @@ def receive_hook(request):
     print("installs", list(Installation.objects.all()))
     print("repoinstalls", list(RepoInstall.objects.all()))
 
-    # TODO
     if event == "ping":
         return HttpResponse("pong")
     elif event == "installation":

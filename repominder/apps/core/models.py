@@ -3,6 +3,17 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
+
+class Profile(models.Model):
+    last_userrepo_refresh = models.DateTimeField(default=timezone.now)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "<Profile: self.user>" % self.user
+
+    __repr__ = __str__
 
 
 class Installation(models.Model):

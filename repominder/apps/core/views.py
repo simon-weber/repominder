@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import json
 import logging
+from datetime import timedelta
 
 from django import forms
 from django.conf import settings
@@ -13,6 +14,7 @@ from django.forms import modelform_factory
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import csrf_exempt
@@ -21,7 +23,7 @@ from django.views.generic import TemplateView
 
 from repominder.lib import ghapp, releases
 
-from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserRepo
+from .models import Installation, Profile, ReleaseWatch, Repo, RepoInstall, UserRepo
 
 logger = logging.getLogger(__name__)
 
@@ -37,9 +39,20 @@ def badge_info(request, selector):
 
 @login_required()
 def account(request):
-    # if request.GET.get('refresh'):
-    #     logger.info("refreshing")
-    ghapp.cache_repos(request.user)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    if request.GET.get("refresh"):
+        logger.info("refresh requested")
+        ghapp.cache_repos(request.user)
+        # pop the querystring
+        return redirect(account)
+    elif profile.last_userrepo_refresh < timezone.now() - timedelta(days=1):
+        logger.info(
+            "last refresh at %s; refreshing", request.user.profile.last_userrepo_refresh
+        )
+        ghapp.cache_repos(request.user)
+        return redirect(account)
+
     print("repos", list(Repo.objects.all()))
     print("installs", list(Installation.objects.all()))
     print("repoinstalls", list(RepoInstall.objects.all()))

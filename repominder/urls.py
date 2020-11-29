@@ -18,8 +18,7 @@ urlpatterns = [
         views.receive_hook,
         name="receive_hook",
     ),
-    # url(r'^privacy/$', PrivacyView.as_view(), name='privacy'),
-    # url(r'^terms/$', TermsView.as_view(), name='terms'),
+    url(r"^privacy/$", views.PrivacyView.as_view(), name="privacy"),
     url(r"^logout/$", views.logout, name="logout"),
-    url(r"^$", views.landing, name="landing"),
+    url(r"^$", views.LoggedOutView.as_view(), name="landing"),
 ]

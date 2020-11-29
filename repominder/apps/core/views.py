@@ -13,8 +13,11 @@ from django.forms import modelform_factory
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView
 
 from repominder.lib import ghapp, releases
 
@@ -32,7 +35,7 @@ def badge_info(request, selector):
     return JsonResponse({"status": "stale" if diff.has_changes else "fresh"})
 
 
-@login_required(login_url="/")
+@login_required()
 def account(request):
     # if request.GET.get('refresh'):
     #     logger.info("refreshing")
@@ -68,6 +71,23 @@ def account(request):
 
 def landing(request):
     return render(request, "logged_out.html", {"GH_APP_NAME": settings.GH_APP_NAME})
+
+
+@method_decorator(cache_control(public=True, max_age=3600), name="dispatch")
+class CachedView(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["GH_APP_NAME"] = settings.GH_APP_NAME
+        context["cached_view"] = True  # base.html looks for this
+        return context
+
+
+class LoggedOutView(CachedView):
+    template_name = "logged_out.html"
+
+
+class PrivacyView(CachedView):
+    template_name = "privacy.html"
 
 
 @login_required(login_url="/")

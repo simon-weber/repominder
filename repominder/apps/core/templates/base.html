@@ -76,7 +76,7 @@
             <div class="container">
               <nav class="navbar navbar-default">
                 <div class="container-fluid">
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and not cached_view %}
                     <div class="navbar-header">
                         <a class="navbar-brand" href="{% url 'account' %}">Repominder</a>
                     </div>
@@ -86,7 +86,7 @@
                     </div>
                     {% endif %}
 
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and not cached_view %}
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'logout' %}?next=/">Log Out</a></li>
                     </ul>
@@ -95,7 +95,7 @@
                     </ul>
                     {% else %}
                     <ul class="nav navbar-nav">
-                        <li><a href="{% url 'landing' %}">Log In</a></li>
+                        <li><a href="{% url 'account' %}">Log In</a></li>
                     </ul>
                     {% endif %}
               </nav>
@@ -117,12 +117,8 @@
             <footer class="footer text-center">
                 {% block footer %}
                 <hr>
-                {% comment %}
                 <a href="/privacy">privacy</a>
                 |
-                <a href="/terms">terms</a>
-                |
-                {% endcomment %}
                 <a href="https://github.com/simon-weber/repominder">code</a>
                 |
                 <a href="https://simonmweber.com">author</a>

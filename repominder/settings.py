@@ -209,6 +209,7 @@ LOGGING = {
 }
 
 
+LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = "/account/"
 
 GH_APP_NAME = "repominder"

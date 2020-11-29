@@ -32,7 +32,7 @@ from django.views.generic import TemplateView
 
 from repominder.lib import ghapp, releases
 
-from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserInstall, UserRepo
+from .models import Installation, ReleaseWatch, Repo, RepoInstall, UserRepo
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ def badge_info(request, selector):
     return JsonResponse({"status": "stale" if diff.has_changes else "fresh"})
 
 
-@login_required(login_url="/")
+@login_required()
 def account(request):
     if request.GET.get("refresh"):
         logger.info("refresh requested")
@@ -62,11 +62,6 @@ def account(request):
             "last refresh at %s; refreshing", request.user.profile.last_userrepo_refresh
         )
         ghapp.cache_repos(request.user)
-
-    print("repos", list(Repo.objects.all()))
-    print("installs", list(Installation.objects.all()))
-    print("repoinstalls", list(RepoInstall.objects.all()))
-    print("userinstalls", list(UserInstall.objects.all()))
 
     configured_repos = []
     watched_repos = []
@@ -93,10 +88,6 @@ def account(request):
     return render(request, "logged_in.html", c)
 
 
-def landing(request):
-    return render(request, "logged_out.html", {"GH_APP_NAME": settings.GH_APP_NAME})
-
-
 @method_decorator(cache_control(public=True, max_age=3600), name="dispatch")
 class CachedView(TemplateView):
     def get_context_data(self, **kwargs):
@@ -114,7 +105,7 @@ class PrivacyView(CachedView):
     template_name = "privacy.html"
 
 
-@login_required(login_url="/")
+@login_required()
 def repo_details(request, id):
     repo = get_object_or_404(Repo, users__in=[request.user], id=id)
     try:
@@ -139,7 +130,8 @@ def repo_details(request, id):
         raise SuspiciousOperation("unrecognized style")
     fields.append("exclude_pattern")
 
-    # TODO probably should use a formset
+    # modify the fields on the generated form to include the digest checkbox.
+    # this should maybe use a formset instead?
     userrepo = UserRepo.objects.get(user=request.user, repo=repo)
     WatchForm = modelform_factory(ReleaseWatch, fields=fields)
     WatchForm.base_fields["enable_digest"] = forms.BooleanField(
@@ -166,17 +158,19 @@ def repo_details(request, id):
         userrepo.save()
     elif request.method == "POST":
         post_data = request.POST.copy()
-        enable_digest = post_data.pop("enable_digest", None)
         form = WatchForm(post_data, instance=releasewatch)
         if form.is_valid():
             releasewatch = form.save(commit=False)
             releasewatch.repo = repo
             releasewatch.save()
-            userrepo.enable_digest = enable_digest == ["on"]
+            userrepo.enable_digest = form.cleaned_data["enable_digest"]
             userrepo.save()
         else:
-            # TODO render errors
-            pass
+            c["releasewatch"] = releasewatch
+            c["watchform"] = form
+            c["badge_url"] = releases.get_badge_url(request, releasewatch)
+            c.update(csrf(request))
+            return render(request, "repo.html", c)
 
     return redirect(account)
 
@@ -205,20 +199,12 @@ def receive_hook(request):
 
     event = request.META.get("HTTP_X_GITHUB_EVENT", "ping")
     data = json.loads(request.body)
-    import pprint
-
-    pprint.pprint(data)
-    print("got", event)
-    print("pre hook")
-    print("repos", list(Repo.objects.all()))
-    print("installs", list(Installation.objects.all()))
-    print("repoinstalls", list(RepoInstall.objects.all()))
+    logger.info("received hook: %r", data)
 
     if event == "ping":
         return HttpResponse("pong")
     elif event == "installation":
         # install/uninstall: update install id + repos
-        # TODO can probably transaction + bulk this like userrepos
         action = data["action"]
         installation_id = data["installation"]["id"]
         repo_details = data["repositories"]
@@ -234,48 +220,51 @@ def receive_hook(request):
                 # hook received before user logged in
                 pass
             for detail in repo_details:
-                print("handle", detail)
                 repo, created = Repo.objects.get_or_create(
                     full_name=detail["full_name"]
                 )
-                print(repo, created)
+                if created:
+                    logger.info("created", repo)
                 repo.installations.add(installation)
         elif action == "deleted":
+            logger.info("deleting %s", installation_id)
             Installation.objects.get(installation_id=installation_id).delete()
-            Repo.objects.filter(installations__isnull=True).delete()
+            repo_count = Repo.objects.filter(installations__isnull=True).delete()
+            logger.info("deleted %s repos", repo_count)
         else:
             logger.warn(
                 "unsupported installation action %r for install %s",
                 action,
                 installation_id,
             )
-
+            return HttpResponseServerError("Operation not supported.", status=501)
+        return HttpResponse(status=200)
     elif event == "installation_repositories":
         # repo add/remove: update repos
         action = data["action"]
         installation_id = data["installation"]["id"]
         if action == "removed":
             for detail in data["repositories_removed"]:
+                logger.info(
+                    "removing to link %s for %s", detail["full_name"], installation_id
+                )
                 RepoInstall.objects.get(
                     repo__full_name=detail["full_name"],
                     installation__installation_id=installation_id,
                 ).delete()
-            to_delete = Repo.objects.filter(installations__isnull=True)
-            if to_delete:
-                print("deleting", to_delete)
-                to_delete.delete()
+            repo_count = Repo.objects.filter(installations__isnull=True).delete()
+            logger.info("deleted %s orphaned repos", repo_count)
         else:
+            logger.info(
+                "removing to link %s for %s", detail["full_name"], installation_id
+            )
             installation = Installation.objects.get(installation_id=installation_id)
             for detail in data["repositories_added"]:
                 repo, created = Repo.objects.get_or_create(
                     full_name=detail["full_name"]
                 )
                 repo.installations.add(installation)
+        return HttpResponse(status=200)
 
-    print("post hook")
-    print("repos", list(Repo.objects.all()))
-    print("installs", list(Installation.objects.all()))
-    print("repoinstalls", list(RepoInstall.objects.all()))
-
-    # In case we receive an event that's neither a ping or push
+    logger.warn("received unexpected event %r", event)
     return HttpResponse(status=204)

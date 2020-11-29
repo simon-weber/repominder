@@ -10,7 +10,7 @@
         <h2>Release reminders for open source maintainers</h2>
         <br/>
         <a class="btn btn-primary btn-lg active" href="https://github.com/apps/{{ GH_APP_NAME }}/installations/new">Install on GitHub</a>
-        <a class="btn btn-default btn-lg active" style="margin-left: 1em;" href="{% url 'social:begin' 'github-app' %}">Log in with GitHub</a>
+        <a class="btn btn-default btn-lg active" style="margin-left: 1em;" href="{% url 'social:begin' 'github-app' %}">Log in</a>
     </div>
 </div>
 <div class="container landing text-center">
@@ -21,45 +21,43 @@
            src="{% static 'core/issue.svg' %}"
            alt="A screenshot of a GitHub issue titled 'Time to cut a release?'">
       <h4>
-      Repominder can email you when you've got changes awaiting release.
+      Repominder can help you remember to cut a release.
       </h4>
     </div>
-    <div class="row" style="margin-top: 3em;">
-      <h2>How it works</h2>
+</div>
+<div class="container landing" style="padding-top: 3.5em; padding-bottom: 3.5em">
+    <div class="row">
+        <div class="col-md-12 text-center">
+          <h2>How it works</h2>
+        </div>
     </div>
     <div class="row">
-        <div class="col-lg-3">
-            <div>
-                <h3>Install the GitHub App</h3>
-                <p>You can choose exactly which repos to give access to.</p>
-            </div>
+      <div class="col-md-8 col-md-offset-2">
+        <div style="padding: 1em">
+          <h3>1: Install the GitHub App</h3>
+          <p>
+          Repominder is a GitHub App, which means you can give it access to specific repos that you manage.
+          All kinds of repos are supported, including organization-owned and private repos.
+          </p>
         </div>
-
-        <div class="col-lg-1">
-            <div>
-                <h3><span class="glyphicon glyphicon-arrow-right"></span></h3>
-            </div>
+        <div style="padding: 1em">
+          <h3>2: Configure release style</h3>
+          <p>
+          You need to describe to Repominder how your project represents releases in git.
+          Both dual-branch - for example, a master and release branch - and tag-based styles are supported.
+          </p>
         </div>
-
-        <div class="col-lg-4">
-            <div>
-                <h3>Configure repos</h3>
-                <p>Set the release style (dual-branch or tag-based) for your repos.</p>
-            </div>
+        <div style="padding: 1em">
+          <h3>3: Get notified</h3>
+          <p>
+          You'll receive an email on Sundays if any of your configured repos have changes pending release.
+          You also get access to readme badges that show your release status:
+          <img src="https://img.shields.io/badge/release-fresh-blue" type="image/svg+xml"></src>
+          or 
+          <img src="https://img.shields.io/badge/release-stale-blue" type="image/svg+xml"></src>
+          </p>
         </div>
-
-        <div class="col-lg-1">
-            <div>
-                <h3><span class="glyphicon glyphicon-arrow-right"></span></h3>
-            </div>
-        </div>
-
-        <div class="col-lg-3">
-            <div>
-                <h3>Receive an email</h3>
-                <p>On Sundays you'll receive an email if you have changes awaiting release.</p>
-            </div>
-        </div>
+      </div>
     </div>
 </div>
 {% endblock header %}

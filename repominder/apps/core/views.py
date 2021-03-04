@@ -255,11 +255,11 @@ def receive_hook(request):
             repo_count = Repo.objects.filter(installations__isnull=True).delete()
             logger.info("deleted %s orphaned repos", repo_count)
         else:
-            logger.info(
-                "removing to link %s for %s", detail["full_name"], installation_id
-            )
             installation = Installation.objects.get(installation_id=installation_id)
             for detail in data["repositories_added"]:
+                logger.info(
+                    "adding link %s for %s", detail["full_name"], installation_id
+                )
                 repo, created = Repo.objects.get_or_create(
                     full_name=detail["full_name"]
                 )

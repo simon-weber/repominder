@@ -4,14 +4,6 @@ Repominder is a Django project that reminds OSS maintainers when they've forgott
 
 You can use it at [https://www.repominder.com](https://www.repominder.com).
 
-## project layout
-
-* repominder/apps/core: main django app
-* repominder/lib: non-django code
-* nix: server config management
-* ansible: app deployment
-* secrets: prod secrets (managed with transcypt)
-
 ## development
 
 To create a new dev environment:

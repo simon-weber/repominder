@@ -224,7 +224,7 @@ def receive_hook(request):
                     full_name=detail["full_name"]
                 )
                 if created:
-                    logger.info("created", repo)
+                    logger.info("created %s", repo)
                 repo.installations.add(installation)
         elif action == "deleted":
             logger.info("deleting %s", installation_id)

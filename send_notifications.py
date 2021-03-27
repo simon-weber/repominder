@@ -1,7 +1,9 @@
 import logging
+import os
 from collections import defaultdict
 
 import django
+import requests
 
 django.setup()
 
@@ -69,5 +71,8 @@ if __name__ == "__main__":
                 logger.exception("failed to send email for %s", releasewatch)
 
         logger.info("done")
+
     except:
         logger.exception("failed to send notifications")
+    else:
+        requests.get(f"https://hc-ping.com/${os.environ['HC_ID_NOTIFY']}", timeout=10)

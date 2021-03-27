@@ -8,4 +8,5 @@ gunicorn
 newrelic
 raven
 requests
+s3cmd
 social-auth-app-django

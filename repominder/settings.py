@@ -14,20 +14,11 @@ import datetime
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRETS_DIR = os.path.join(BASE_DIR, "secrets")
-
-
-def get_secret(filename):
-    with open(os.path.join(SECRETS_DIR, filename)) as f:
-        return f.read().strip()
-
 
 DEBUG = False
-SECRET_KEY = get_secret("secret_key.txt")
 
 SCHEME = "https://"
-HOST = "www.repominder.com"
-ALLOWED_HOSTS = [HOST]
+HOST = os.environ["SITE"]
 PORT = 8000
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -56,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "repominder.apps.core",
     "bootstrap3",
     "djmail",
@@ -109,8 +101,6 @@ DATABASES = {
 # Email
 EMAIL_BACKEND = "djmail.backends.async.EmailBackend"
 DJMAIL_REAL_BACKEND = "django_amazon_ses.EmailBackend"
-AWS_ACCESS_KEY_ID = get_secret("ses.id")
-AWS_SECRET_ACCESS_KEY = get_secret("ses.key")
 DEFAULT_FROM_EMAIL = "Repominder <noreply@repominder.com>"
 NOREPLY_ADDRESS = "noreply.zone <noreply@devnull.noreply.zone>"
 
@@ -155,7 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = "/assets/"
-STATIC_ROOT = "/opt/repominder/assets"
+STATIC_ROOT = "/opt/assets"
 
 LOGGING = {
     "version": 1,
@@ -209,13 +199,12 @@ LOGGING = {
 }
 
 
+SITE_ID = 1
 LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = "/account/"
 
 GH_APP_NAME = "repominder"
 GH_APP_ID = 6645
-GH_APP_PEM = get_secret("ghapp_privkey.pem")
-GH_APP_WEBHOOK_SECRET = get_secret("ghapp_webhook_secret.txt")
 
 # python-social-auth
 AUTHENTICATION_BACKENDS = (
@@ -225,7 +214,6 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_GITHUB_APP_KEY = "Iv1.8f8d24ae1cde5829"
-SOCIAL_AUTH_GITHUB_APP_SECRET = get_secret("ghapp_client_secret.txt")
 SOCIAL_AUTH_GITHUB_SCOPE = ["user:email"]
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ["installation_id"]
@@ -241,12 +229,6 @@ SOCIAL_AUTH_PIPELINE = (
     "repominder.apps.core.cache_github_details",
 )
 
-
-# Sentry
-RAVEN_CONFIG = {
-    "dsn": get_secret("raven.dsn"),
-    "release": RELEASE,
-}
 
 BOOTSTRAP3 = {
     "horizontal_label_class": "col-md-3",

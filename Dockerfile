@@ -2,14 +2,16 @@ FROM python:3.7.9-slim-stretch
 
 WORKDIR /app
 EXPOSE 8000
-ENV DJANGO_SETTINGS_MODULE=repominder.settings
+ENV DJANGO_SETTINGS_MODULE=repominder.settings_prod
+
+# https://github.com/nouchka/docker-sqlite3/blob/master/Dockerfile
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install sqlite3=3.* wget && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-ADD docker-archive.tar ./
+ADD app-archive.tar ./
 
-RUN groupadd --gid 499 repominder \
-  && useradd --uid 497 --gid repominder --shell /bin/bash --create-home repominder
-USER repominder:repominder
 CMD ["gunicorn", "--worker-class", "gevent", "repominder.wsgi", "-b", "0.0.0.0:8000"]

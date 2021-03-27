@@ -1,5 +1,5 @@
 from .settings import *  # noqa
-from .settings import BASE_DIR, RAVEN_CONFIG, get_secret, os
+from .settings import BASE_DIR, os
 
 DEBUG = True
 SECRET_KEY = "dev_secret_key"
@@ -23,16 +23,14 @@ DATABASES = {
 
 GH_APP_NAME = "repominder-dev"
 GH_APP_ID = 6687
-GH_APP_PEM = get_secret("ghapp_privkey-dev.pem")
-GH_APP_WEBHOOK_SECRET = get_secret("ghapp_webhook_secret-dev.txt")
+GH_APP_PEM = os.environ["GHAPP_PRIVKEY_DEV"]
+GH_APP_WEBHOOK_SECRET = os.environ["GHAPP_WEBHOOK_SECRET_DEV"]
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 SOCIAL_AUTH_GITHUB_APP_KEY = "Iv1.8673e1a33dca52e9"
-SOCIAL_AUTH_GITHUB_APP_SECRET = get_secret("ghapp_client_secret-dev.txt")
+SOCIAL_AUTH_GITHUB_APP_SECRET = os.environ["GHAPP_CLIENT_SECRET_DEV"]
 
 DJMAIL_REAL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-RAVEN_CONFIG.pop("dsn")
 
 # serve static files without nginx in dev
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "assets"),)

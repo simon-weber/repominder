@@ -1,4 +1,4 @@
-docker-archive.tar
+app-archive.tar
 
 .vagrant
 venv-*

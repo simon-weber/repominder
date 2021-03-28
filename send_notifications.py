@@ -75,4 +75,4 @@ if __name__ == "__main__":
     except:
         logger.exception("failed to send notifications")
     else:
-        requests.get(f"https://hc-ping.com/${os.environ['HC_ID_NOTIFY']}", timeout=10)
+        requests.get(f"https://hc-ping.com/{os.environ['HC_ID_NOTIFY']}", timeout=10)

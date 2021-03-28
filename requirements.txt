@@ -22,7 +22,6 @@ greenlet==0.4.15          # via gevent
 gunicorn==19.9.0          # via -r requirements.in
 idna==2.6                 # via requests
 jmespath==0.9.4           # via boto3, botocore
-newrelic==2.96.0.80       # via -r requirements.in
 oauthlib==2.0.6           # via requests-oauthlib, social-auth-core
 pycparser==2.20           # via cffi
 pygithub==1.53            # via -r requirements.in

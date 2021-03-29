@@ -1,5 +1,4 @@
 -r requirements.txt
-ansible
 black
 flake8
 isort

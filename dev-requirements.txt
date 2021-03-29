@@ -4,7 +4,6 @@
 #
 #    pip-compile dev-requirements.in
 #
-ansible==2.8.1            # via -r dev-requirements.in
 appdirs==1.4.4            # via black, virtualenv
 black==20.8b1             # via -r dev-requirements.in
 boto3==1.9.190            # via -r requirements.txt, django-amazon-ses
@@ -14,13 +13,13 @@ cffi==1.14.0              # via -r requirements.txt, cryptography
 cfgv==3.2.0               # via pre-commit
 chardet==3.0.4            # via -r requirements.txt, requests
 click==7.1.2              # via black, pip-tools
-cryptography==2.9.2       # via -r requirements.txt, ansible, social-auth-core
+cryptography==2.9.2       # via -r requirements.txt, social-auth-core
 defusedxml==0.6.0         # via -r requirements.txt, python3-openid, social-auth-core
 deprecated==1.2.10        # via -r requirements.txt, pygithub
 distlib==0.3.1            # via virtualenv
 django-amazon-ses==2.1.1  # via -r requirements.txt
 django-bootstrap3==9.1.0  # via -r requirements.txt
-django==2.2.16            # via -r requirements.txt, django-amazon-ses
+django==2.2.19            # via -r requirements.txt, django-amazon-ses
 djmail==1.0.1             # via -r requirements.txt
 docutils==0.14            # via -r requirements.txt, botocore
 filelock==3.0.12          # via virtualenv
@@ -32,9 +31,7 @@ identify==1.5.9           # via pre-commit
 idna==2.6                 # via -r requirements.txt, requests
 importlib-metadata==2.0.0  # via flake8, pre-commit, virtualenv
 isort==5.6.4              # via -r dev-requirements.in
-jinja2==2.10              # via ansible
 jmespath==0.9.4           # via -r requirements.txt, boto3, botocore
-markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via flake8
 mypy-extensions==0.4.3    # via black
 nodeenv==1.5.0            # via pre-commit
@@ -51,7 +48,7 @@ python-dateutil==2.8.0    # via -r requirements.txt, botocore, s3cmd
 python-magic==0.4.22      # via -r requirements.txt, s3cmd
 python3-openid==3.1.0     # via -r requirements.txt, social-auth-core
 pytz==2018.5              # via -r requirements.txt, django
-pyyaml==5.3.1             # via ansible, pre-commit
+pyyaml==5.3.1             # via pre-commit
 raven==6.3.0              # via -r requirements.txt
 regex==2020.11.13         # via black
 requests-oauthlib==0.8.0  # via -r requirements.txt, social-auth-core

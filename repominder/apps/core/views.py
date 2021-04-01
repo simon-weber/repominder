@@ -39,11 +39,17 @@ logger = logging.getLogger(__name__)
 
 def badge_info(request, selector):
     data = releases.decode_badge_selector(str(selector))
-    releasewatch = Repo.objects.get(full_name=data["full_name"]).releasewatch
+    try:
+        releasewatch = Repo.objects.get(full_name=data["full_name"]).releasewatch
+    except (KeyError, Repo.DoesNotExist):
+        res = {"status": "unknown"}
+    else:
+        diff = releases.ReleaseDiff.from_releasewatch(releasewatch)
+        res = {"status": "stale" if diff.has_changes else "fresh"}
 
-    diff = releases.ReleaseDiff.from_releasewatch(releasewatch)
+    logger.info("%r for badge data: %r", res["status"], data)
 
-    return JsonResponse({"status": "stale" if diff.has_changes else "fresh"})
+    return JsonResponse(res)
 
 
 @login_required()

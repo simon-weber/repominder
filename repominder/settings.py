@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     "repominder.apps.core",
     "bootstrap3",
     "djmail",
-    "raven.contrib.django.raven_compat",
     "social_django",
 ]
 
@@ -149,7 +148,7 @@ STATIC_ROOT = "/opt/assets"
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": True,
+    "disable_existing_loggers": False,
     "formatters": {
         "simple": {"format": "%(levelname)s: %(asctime)s - %(name)s: %(message)s"},
         "withfile": {
@@ -165,35 +164,32 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "withfile",
         },
-        "sentry": {
-            "level": "WARNING",
-            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
-        },
     },
     "loggers": {
-        "": {
-            "level": "WARNING",
-            "handlers": ["sentry"],
-        },
         "django": {
             "handlers": ["console_simple"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "WARNING"),
+            "propagate": False,
         },
         "django.server": {
             "handlers": ["console_simple"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
         },
         "github": {
             "handlers": ["console_simple"],
             "level": "INFO",
+            "propagate": False,
         },
         "repominder": {
             "handlers": ["console_verbose"],
             "level": "INFO",
+            "propagate": False,
         },
         "requests.packages.urllib3": {
             "handlers": ["console_simple"],
             "level": "DEBUG",
+            "propagate": False,
         },
     },
 }

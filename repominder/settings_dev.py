@@ -1,3 +1,5 @@
+import sentry_sdk
+
 from .settings import *  # noqa
 from .settings import BASE_DIR, os
 
@@ -34,3 +36,5 @@ DJMAIL_REAL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # serve static files without nginx in dev
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "assets"),)
+
+sentry_sdk.init(dsn="")

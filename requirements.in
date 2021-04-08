@@ -5,7 +5,7 @@ django-bootstrap3
 djmail
 gevent
 gunicorn
-raven
 requests
 s3cmd
+sentry_sdk
 social-auth-app-django

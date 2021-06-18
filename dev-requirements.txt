@@ -6,8 +6,8 @@
 #
 appdirs==1.4.4            # via black, virtualenv
 black==20.8b1             # via -r dev-requirements.in
-boto3==1.9.190            # via -r requirements.txt, django-amazon-ses
-botocore==1.12.190        # via -r requirements.txt, boto3, s3transfer
+boto3==1.17.97            # via -r requirements.txt, django-amazon-ses
+botocore==1.20.97         # via -r requirements.txt, boto3, s3transfer
 certifi==2017.11.5        # via -r requirements.txt, requests, sentry-sdk
 cffi==1.14.0              # via -r requirements.txt, cryptography
 cfgv==3.2.0               # via pre-commit
@@ -19,9 +19,8 @@ deprecated==1.2.10        # via -r requirements.txt, pygithub
 distlib==0.3.1            # via virtualenv
 django-amazon-ses==2.1.1  # via -r requirements.txt
 django-bootstrap3==9.1.0  # via -r requirements.txt
-django==2.2.19            # via -r requirements.txt, django-amazon-ses
+django==2.2.24            # via -r requirements.txt, django-amazon-ses
 djmail==1.0.1             # via -r requirements.txt
-docutils==0.14            # via -r requirements.txt, botocore
 filelock==3.0.12          # via virtualenv
 flake8==3.8.4             # via -r dev-requirements.in
 gevent==1.4.0             # via -r requirements.txt
@@ -51,9 +50,9 @@ pytz==2018.5              # via -r requirements.txt, django
 pyyaml==5.3.1             # via pre-commit
 regex==2020.11.13         # via black
 requests-oauthlib==0.8.0  # via -r requirements.txt, social-auth-core
-requests==2.20.1          # via -r requirements.txt, pygithub, requests-oauthlib, social-auth-core
+requests==2.25.1          # via -r requirements.txt, pygithub, requests-oauthlib, social-auth-core
 s3cmd==2.1.0              # via -r requirements.txt
-s3transfer==0.2.1         # via -r requirements.txt, boto3
+s3transfer==0.4.2         # via -r requirements.txt, boto3
 sentry-sdk==1.0.0         # via -r requirements.txt
 six==1.11.0               # via -r requirements.txt, cryptography, pip-tools, python-dateutil, social-auth-app-django, social-auth-core, virtualenv
 social-auth-app-django==3.4.0  # via -r requirements.txt
@@ -62,7 +61,7 @@ sqlparse==0.3.0           # via -r requirements.txt, django
 toml==0.10.2              # via black, pre-commit
 typed-ast==1.4.1          # via black
 typing-extensions==3.7.4.3  # via black
-urllib3==1.23             # via -r requirements.txt, botocore, requests, sentry-sdk
+urllib3==1.26.5           # via -r requirements.txt, botocore, requests, sentry-sdk
 virtualenv==20.2.0        # via pre-commit
 wrapt==1.12.1             # via -r requirements.txt, deprecated
 zipp==3.4.0               # via importlib-metadata

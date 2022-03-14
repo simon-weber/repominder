@@ -86,7 +86,7 @@ def build_app_token(iss, key_contents, iat=None, exp=None):
         "iss": iss,
     }
 
-    return jwt.encode(payload, key_contents, algorithm="RS256").decode("utf-8")
+    return jwt.encode(payload, key_contents, algorithm="RS256")
 
 
 def get_installation_token_details(installation_id, app_token):

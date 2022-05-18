@@ -15,7 +15,7 @@ defusedxml==0.6.0         # via python3-openid, social-auth-core
 deprecated==1.2.10        # via pygithub
 django-amazon-ses==2.1.1  # via -r requirements.in
 django-bootstrap3==21.2   # via -r requirements.in
-django==3.2.12            # via -r requirements.in, django-amazon-ses, django-bootstrap3
+django==3.2.13            # via -r requirements.in, django-amazon-ses, django-bootstrap3
 djmail==2.0.0             # via -r requirements.in
 gevent==1.4.0             # via -r requirements.in
 greenlet==0.4.15          # via gevent

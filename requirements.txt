@@ -26,7 +26,7 @@ jmespath==0.9.4           # via boto3, botocore
 oauthlib==2.0.6           # via requests-oauthlib, social-auth-core
 pycparser==2.20           # via cffi
 pygithub==1.53            # via -r requirements.in
-pyjwt==2.3.0              # via pygithub, social-auth-core
+pyjwt==2.4.0              # via pygithub, social-auth-core
 python-dateutil==2.8.0    # via botocore, s3cmd
 python-magic==0.4.22      # via s3cmd
 python3-openid==3.1.0     # via social-auth-core

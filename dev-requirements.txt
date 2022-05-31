@@ -43,7 +43,7 @@ pycodestyle==2.6.0        # via flake8
 pycparser==2.20           # via -r requirements.txt, cffi
 pyflakes==2.2.0           # via flake8
 pygithub==1.53            # via -r requirements.txt
-pyjwt==2.3.0              # via -r requirements.txt, pygithub, social-auth-core
+pyjwt==2.4.0              # via -r requirements.txt, pygithub, social-auth-core
 python-dateutil==2.8.0    # via -r requirements.txt, botocore, s3cmd
 python-magic==0.4.22      # via -r requirements.txt, s3cmd
 python3-openid==3.1.0     # via -r requirements.txt, social-auth-core

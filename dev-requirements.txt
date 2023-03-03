@@ -20,7 +20,7 @@ deprecated==1.2.10        # via -r requirements.txt, pygithub
 distlib==0.3.1            # via virtualenv
 django-amazon-ses==2.1.1  # via -r requirements.txt
 django-bootstrap3==21.2   # via -r requirements.txt
-django==3.2.16            # via -r requirements.txt, django-amazon-ses, django-bootstrap3
+django==3.2.18            # via -r requirements.txt, django-amazon-ses, django-bootstrap3
 djmail==2.0.0             # via -r requirements.txt
 filelock==3.0.12          # via virtualenv
 flake8==3.8.4             # via -r dev-requirements.in

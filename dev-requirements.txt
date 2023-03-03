@@ -14,7 +14,7 @@ cffi==1.14.0              # via -r requirements.txt, cryptography
 cfgv==3.2.0               # via pre-commit
 chardet==3.0.4            # via -r requirements.txt, requests
 click==7.1.2              # via black, pip-tools
-cryptography==36.0.1      # via -r requirements.txt, social-auth-core
+cryptography==39.0.1      # via -r requirements.txt, social-auth-core
 defusedxml==0.6.0         # via -r requirements.txt, python3-openid, social-auth-core
 deprecated==1.2.10        # via -r requirements.txt, pygithub
 distlib==0.3.1            # via virtualenv

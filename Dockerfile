@@ -1,4 +1,4 @@
-FROM python:3.7.9-slim-stretch
+FROM python:3.9.20-slim-bookworm
 
 WORKDIR /app
 EXPOSE 8000
@@ -6,7 +6,7 @@ ENV DJANGO_SETTINGS_MODULE=repominder.settings_prod
 
 # https://github.com/nouchka/docker-sqlite3/blob/master/Dockerfile
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install sqlite3=3.* wget && \
+  DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install sqlite3=3.* wget build-essential libffi-dev && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY requirements.txt ./

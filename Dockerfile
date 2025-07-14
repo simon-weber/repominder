@@ -9,9 +9,10 @@ RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install sqlite3=3.* wget build-essential libffi-dev && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY --from=ghcr.io/astral-sh/uv:0.7.21 /uv /uvx /bin/
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev --no-cache
 
 ADD app-archive.tar ./
 
-CMD ["gunicorn", "--worker-class", "gevent", "repominder.wsgi", "-b", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "--worker-class", "gevent", "repominder.wsgi", "-b", "0.0.0.0:8000"]

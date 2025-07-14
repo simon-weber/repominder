@@ -1,0 +1,30 @@
+[project]
+name = "repominder"
+version = "0.0.1"
+requires-python = ">= 3.9"
+dependencies = [
+    "pygithub",
+    "django",
+    "django-amazon-ses",
+    "django-bootstrap3",
+    "djmail",
+    "gevent",
+    "gunicorn",
+    "requests",
+    "s3cmd",
+    "sentry-sdk",
+    "social-auth-app-django",
+]
+
+[dependency-groups]
+dev = [
+    "black",
+    "flake8",
+    "isort",
+    "pre-commit",
+]
+
+[tool.uv]
+environments = [
+    "sys_platform == 'linux' and implementation_name == 'cpython'",
+]

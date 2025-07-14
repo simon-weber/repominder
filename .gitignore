@@ -2,6 +2,7 @@ app-archive.tar
 
 .vagrant
 venv-*
+.venv
 *.pyc
 gcp_rm_rsa*
 nix_rsa*

@@ -8,8 +8,5 @@ deploy-cluster: build-cluster
 	envsubst < kube/deployment.env.yaml | kubectl apply -f - && \
 	kubectl rollout restart deployment repominder
 
-pip-compile:
-	pip-compile -r requirements.in && pip-compile -r dev-requirements.in && pip-sync dev-requirements.txt
-
 hooks:
 	pre-commit run -v --files $$(git ls-files -m)

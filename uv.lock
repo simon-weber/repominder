@@ -201,15 +201,15 @@ wheels = [
 
 [[package]]
 name = "django-amazon-ses"
-version = "2.1.1"
+version = "4.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3", marker = "implementation_name == 'cpython' and sys_platform == 'linux'" },
     { name = "django", marker = "implementation_name == 'cpython' and sys_platform == 'linux'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/ff/95d3c66a7f3e20e15484b72f347e40bbdef0dd7b9c6096f76f4c5317a68f/django-amazon-ses-2.1.1.tar.gz", hash = "sha256:fb168c60fb9bc7fc482cf664e861643816c181dccb9e875d6ecc61f76fc0b0b3", size = 10586, upload-time = "2019-06-08T14:04:49.6Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c9/75/942582e7017ee8a4b63a829a8c0c4623577d2d4c47be793a5643d5c6257b/django-amazon-ses-4.0.1.tar.gz", hash = "sha256:338606b0cf40e07e5cafdea65cb4d0ffa8997d7c8a1817544f352406aa095ae0", size = 10812, upload-time = "2022-04-04T23:01:54.587Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/eb/2119436b296b4640407bbb7cb7fb6116b0de4df43ae2fd4a6ae8dcbad5bd/django_amazon_ses-2.1.1-py2.py3-none-any.whl", hash = "sha256:2135a6ba2ac6b004f534afab17c812ce8c42db7bc64cc149f8f696fecc6925c3", size = 8881, upload-time = "2019-06-08T14:04:47.716Z" },
+    { url = "https://files.pythonhosted.org/packages/1a/07/2d93fe1d2e24eedee073bc3467f67e604597fcc8693004ffccf2b0e28a9a/django_amazon_ses-4.0.1-py3-none-any.whl", hash = "sha256:ed01e1e87efb4439dd3747c2c45e82e29dc5139e7ba83c47619970e391078138", size = 9035, upload-time = "2022-04-04T23:01:52.575Z" },
 ]
 
 [[package]]

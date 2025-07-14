@@ -4,6 +4,7 @@ set -e
 
 chmod 770 /opt/repominder
 
+source .venv/bin/activate
 python manage.py collectstatic -c --noinput
 
 python manage.py migrate --noinput
